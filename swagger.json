@@ -1,0 +1,2762 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is a API for access management for jointbox project",
+    "version" : "1.0.0",
+    "title" : "Jointbox access API",
+    "contact" : {
+      "email" : "dmitriy.selischev@logicify.com"
+    },
+    "license" : {
+      "name" : "GPL v3",
+      "url" : "https://www.gnu.org/licenses/gpl-3.0.html"
+    }
+  },
+  "host" : "jbaccess-server.herokuapp.com",
+  "basePath" : "/",
+  "tags" : [ {
+    "name" : "security",
+    "description" : "used for login/logout and session restoring operations"
+  }, {
+    "name" : "personnel",
+    "description" : "actions with personnel"
+  }, {
+    "name" : "places",
+    "description" : "actions with places"
+  }, {
+    "name" : "doors",
+    "description" : "actions with doors"
+  }, {
+    "name" : "keys",
+    "description" : "actions with keys"
+  }, {
+    "name" : "roles",
+    "description" : "actions with roles"
+  }, {
+    "name" : "controllers",
+    "description" : "actions with controllers"
+  }, {
+    "name" : "ACLs",
+    "description" : "actions with ACLs"
+  }, {
+    "name" : "aclResolving",
+    "description" : "actions for resolving of ACLs in simple key-door format"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/security/restore-session" : {
+      "get" : {
+        "tags" : [ "security" ],
+        "summary" : "restore user information using auth token",
+        "operationId" : "restoreSession",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/userInfoResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/security/login" : {
+      "post" : {
+        "tags" : [ "security" ],
+        "summary" : "login action",
+        "operationId" : "login",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "login",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/loginInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/userInfoResponse"
+            }
+          }
+        }
+      }
+    },
+    "/security/logout" : {
+      "get" : {
+        "tags" : [ "security" ],
+        "summary" : "logout action",
+        "operationId" : "logout",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/controllers/{id}" : {
+      "get" : {
+        "tags" : [ "controllers" ],
+        "summary" : "get controller info by id",
+        "operationId" : "getController",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/controllerResponse"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "controllers" ],
+        "summary" : "update controller info. Requires auth",
+        "operationId" : "updateController",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "controller dto",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/controllerInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/controllerResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "controllers" ],
+        "summary" : "delete controller but not delete attached doors. Requires auth",
+        "operationId" : "deleteController",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/controllers/{id}/doors" : {
+      "get" : {
+        "tags" : [ "controllers", "doors" ],
+        "summary" : "get all doors attached to controller",
+        "operationId" : "getDoorsByController",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allDoorsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/controllers/{controller_id}/doors/{door_id}" : {
+      "put" : {
+        "tags" : [ "controllers", "doors" ],
+        "summary" : "attach door to a controller. Requires auth",
+        "operationId" : "attachDoorToController",
+        "parameters" : [ {
+          "name" : "controller_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "door_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "controllers", "doors" ],
+        "summary" : "detach door from a controller. Requires auth",
+        "operationId" : "detachDoorFromController",
+        "parameters" : [ {
+          "name" : "controller_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "door_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/controllers" : {
+      "get" : {
+        "tags" : [ "controllers" ],
+        "summary" : "gets all controllers",
+        "operationId" : "getAllControllers",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allControllersResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "controllers" ],
+        "summary" : "create new controller. Requires auth",
+        "operationId" : "createController",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "controller",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/controllerInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/controllerResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/doors/{id}" : {
+      "get" : {
+        "tags" : [ "doors" ],
+        "summary" : "get door by id",
+        "operationId" : "getDoor",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/doorResponse"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "doors" ],
+        "summary" : "update door by id. Requires auth",
+        "operationId" : "updateDoor",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "door",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/doorInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/doorResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "doors" ],
+        "summary" : "get door by id. Requires auth",
+        "operationId" : "deleteDoor",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/doors" : {
+      "get" : {
+        "tags" : [ "doors" ],
+        "summary" : "get all doors",
+        "operationId" : "getAllDoors",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allDoorsResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "doors" ],
+        "summary" : "create new door. Requires auth",
+        "operationId" : "createDoor",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "door",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/doorInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/doorResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/places/{id}" : {
+      "get" : {
+        "tags" : [ "places" ],
+        "summary" : "get place by id",
+        "operationId" : "getPlace",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/placeResponse"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "places" ],
+        "summary" : "update place by id",
+        "operationId" : "updatePlace",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "place",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/placeInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/placeResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "places" ],
+        "summary" : "delete place by id",
+        "operationId" : "deletePlace",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/places" : {
+      "get" : {
+        "tags" : [ "places" ],
+        "summary" : "get all places",
+        "operationId" : "getAllPlaces",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allPlacesResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "places" ],
+        "summary" : "create new place",
+        "operationId" : "createPlace",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "place",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/placeInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/placeResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/places/{id}/doors" : {
+      "get" : {
+        "tags" : [ "places", "doors" ],
+        "summary" : "get doors attached to place",
+        "operationId" : "getDoorsByPlace",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allPlacesResponse"
+            }
+          }
+        }
+      }
+    },
+    "/places/{place_id}/doors/{door_id}" : {
+      "put" : {
+        "tags" : [ "places", "doors" ],
+        "summary" : "attach door to place",
+        "operationId" : "attachDoorToPlace",
+        "parameters" : [ {
+          "name" : "place_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "door_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "places", "doors" ],
+        "summary" : "detach door from place",
+        "operationId" : "detachDoorFromPlace",
+        "parameters" : [ {
+          "name" : "place_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "door_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/person/{id}" : {
+      "get" : {
+        "tags" : [ "personnel" ],
+        "summary" : "get person by id",
+        "operationId" : "getPerson",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/personResponse"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "personnel" ],
+        "summary" : "update person by id",
+        "operationId" : "updatePerson",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "person",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/personInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/personResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "personnel" ],
+        "summary" : "delete person by id",
+        "operationId" : "deletePerson",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/person/{id}/keys" : {
+      "get" : {
+        "tags" : [ "keys", "personnel" ],
+        "summary" : "get keys attached to person",
+        "operationId" : "getKeysByPerson",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allKeysResponse"
+            }
+          }
+        }
+      }
+    },
+    "/person/{id}/roles" : {
+      "get" : {
+        "tags" : [ "roles", "personnel" ],
+        "summary" : "get roles attached to person",
+        "operationId" : "getRolesByPerson",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allRolesResponse"
+            }
+          }
+        }
+      }
+    },
+    "/person/{person_id}/roles/{role_id}" : {
+      "put" : {
+        "tags" : [ "personnel", "roles" ],
+        "summary" : "attach role to person",
+        "operationId" : "attachRoleToPerson",
+        "parameters" : [ {
+          "name" : "person_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "role_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "personnel", "roles" ],
+        "summary" : "detach role from person",
+        "operationId" : "detachRoleFromPerson",
+        "parameters" : [ {
+          "name" : "person_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "role_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/person" : {
+      "get" : {
+        "tags" : [ "personnel" ],
+        "summary" : "get all personnel",
+        "operationId" : "getAllPersonnel",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allPersonnelResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "personnel" ],
+        "summary" : "create new person",
+        "operationId" : "createPerson",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "person",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/personInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/personResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/keys/{id}" : {
+      "get" : {
+        "tags" : [ "keys" ],
+        "summary" : "get key by id",
+        "operationId" : "getKey",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/keyResponse"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "keys" ],
+        "summary" : "update key by id",
+        "operationId" : "updateKey",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "key",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/keyInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/keyResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "keys" ],
+        "summary" : "delete key by id",
+        "operationId" : "deleteKey",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/keys" : {
+      "get" : {
+        "tags" : [ "keys" ],
+        "summary" : "get all keys",
+        "operationId" : "getAllKeys",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allKeysResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "keys" ],
+        "summary" : "create new key",
+        "operationId" : "createKey",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "person",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/keyInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/keyResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/roles/{id}" : {
+      "get" : {
+        "tags" : [ "roles" ],
+        "summary" : "get role by id",
+        "operationId" : "getRoles",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/roleResponse"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "roles" ],
+        "summary" : "update role by id",
+        "operationId" : "updateRole",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "role",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/roleInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/roleResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "roles" ],
+        "summary" : "delete role by id",
+        "operationId" : "deleteRole",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/roles" : {
+      "get" : {
+        "tags" : [ "roles" ],
+        "summary" : "get all roles",
+        "operationId" : "getAllRoles",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allRolesResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "roles" ],
+        "summary" : "create new role",
+        "operationId" : "createRole",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "role",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/roleInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/roleResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/person/{person_id}/allow/{place_id}" : {
+      "put" : {
+        "tags" : [ "ACLs", "personnel", "places" ],
+        "summary" : "add allow rule to place for person",
+        "operationId" : "allowPlaceForPerson",
+        "parameters" : [ {
+          "name" : "person_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "place_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/personAclResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/person/{person_id}/deny/{place_id}" : {
+      "put" : {
+        "tags" : [ "ACLs", "personnel", "places" ],
+        "summary" : "add deny rule to place for person",
+        "operationId" : "denyPlaceForPerson",
+        "parameters" : [ {
+          "name" : "person_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "place_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/personAclResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/person/{id}/acls" : {
+      "get" : {
+        "tags" : [ "ACLs", "personnel", "places" ],
+        "summary" : "get ACLs by person",
+        "operationId" : "getPersonACLs",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allPersonAclsResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/role/{role_id}/allow/{place_id}" : {
+      "put" : {
+        "tags" : [ "ACLs", "roles", "places" ],
+        "summary" : "add allow rule to place for role",
+        "operationId" : "allowPlaceForRole",
+        "parameters" : [ {
+          "name" : "role_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "place_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/roleAclResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/role/{role_id}/deny/{place_id}" : {
+      "put" : {
+        "tags" : [ "ACLs", "roles", "places" ],
+        "summary" : "add deny rule to place for role",
+        "operationId" : "denyPlaceForRole",
+        "parameters" : [ {
+          "name" : "role_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "place_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/roleAclResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/role/{id}/acls" : {
+      "get" : {
+        "tags" : [ "ACLs", "roles", "places" ],
+        "summary" : "get ACLs by role",
+        "operationId" : "getRoleACLs",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allRoleAclsResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/acls/{id}/patterns" : {
+      "get" : {
+        "tags" : [ "ACLs" ],
+        "summary" : "get patterns by ACL",
+        "operationId" : "getPatternsByACL",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allPatternsResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "ACLs" ],
+        "summary" : "create pattern for ACL",
+        "operationId" : "createPatternForACL",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "pattern",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/patternInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/patternResponse"
+            }
+          }
+        }
+      }
+    },
+    "/acls/patterns/{pattern_id}" : {
+      "put" : {
+        "tags" : [ "ACLs" ],
+        "summary" : "update pattern",
+        "operationId" : "updatePattern",
+        "parameters" : [ {
+          "name" : "pattern_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "pattern",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/patternInDto"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/patternResponse"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "ACLs" ],
+        "summary" : "delete pattern",
+        "operationId" : "deletePattern",
+        "parameters" : [ {
+          "name" : "pattern_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          }
+        }
+      }
+    },
+    "/acls/{id}" : {
+      "delete" : {
+        "tags" : [ "ACLs" ],
+        "summary" : "delete ACL",
+        "operationId" : "deleteACL",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/emptyOkResponse"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          }
+        }
+      }
+    },
+    "/controllers/{controller_id}/resolve-acls" : {
+      "get" : {
+        "tags" : [ "controllers", "aclResolving" ],
+        "summary" : "resolve ACLs at the unique format",
+        "operationId" : "resolveACLs",
+        "parameters" : [ {
+          "name" : "controller_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/allResolvedAclResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "loginInDto" : {
+      "type" : "object",
+      "required" : [ "login", "password" ],
+      "properties" : {
+        "login" : {
+          "type" : "string",
+          "example" : "myuniquelogin"
+        },
+        "password" : {
+          "type" : "string",
+          "example" : "**********"
+        }
+      }
+    },
+    "groupOutDto" : {
+      "type" : "object",
+      "required" : [ "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "admin"
+        }
+      },
+      "example" : {
+        "name" : "admin",
+        "id" : 1
+      }
+    },
+    "userOutDto" : {
+      "type" : "object",
+      "required" : [ "email", "groups", "id", "username" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "username" : {
+          "type" : "string",
+          "example" : "mylogin"
+        },
+        "first_name" : {
+          "type" : "string",
+          "example" : "My First name"
+        },
+        "last_name" : {
+          "type" : "string",
+          "example" : "My Last name"
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "email@example.net"
+        },
+        "groups" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/groupOutDto"
+          }
+        }
+      },
+      "example" : {
+        "last_name" : "My Last name",
+        "groups" : [ {
+          "name" : "admin",
+          "id" : 1
+        }, {
+          "name" : "admin",
+          "id" : 1
+        } ],
+        "id" : 1,
+        "first_name" : "My First name",
+        "email" : "email@example.net",
+        "username" : "mylogin"
+      }
+    },
+    "controllerInDto" : {
+      "type" : "object",
+      "required" : [ "controller_id", "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "Controller in server room"
+        },
+        "controller_id" : {
+          "type" : "string",
+          "example" : "3474687a23cd34e98f1233522345"
+        }
+      }
+    },
+    "controllerOutDto" : {
+      "type" : "object",
+      "required" : [ "controller_id", "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Controller in server room"
+        },
+        "controller_id" : {
+          "type" : "string",
+          "example" : "3474687a23cd34e98f1233522345"
+        }
+      },
+      "example" : {
+        "controller_id" : "3474687a23cd34e98f1233522345",
+        "name" : "Controller in server room",
+        "id" : 0
+      }
+    },
+    "doorInDto" : {
+      "type" : "object",
+      "required" : [ "access_id", "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "Door to main hall"
+        },
+        "access_id" : {
+          "type" : "string",
+          "example" : "a26d6bc532532e34ca6"
+        }
+      }
+    },
+    "doorOutDto" : {
+      "type" : "object",
+      "required" : [ "access_id", "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Door to main hall"
+        },
+        "access_id" : {
+          "type" : "string",
+          "example" : "a26d6bc532532e34ca6"
+        }
+      },
+      "example" : {
+        "name" : "Door to main hall",
+        "access_id" : "a26d6bc532532e34ca6",
+        "id" : 1
+      }
+    },
+    "serviceObject" : {
+      "type" : "object",
+      "required" : [ "api_version", "error_code", "error_message", "node_id", "successful", "validation_errors" ],
+      "properties" : {
+        "error_code" : {
+          "type" : "number",
+          "example" : 0.0
+        },
+        "error_message" : {
+          "type" : "string"
+        },
+        "node_id" : {
+          "type" : "string",
+          "example" : "machine1"
+        },
+        "validation_errors" : {
+          "type" : "array",
+          "example" : ""
+        },
+        "successful" : {
+          "type" : "boolean",
+          "example" : true
+        },
+        "api_version" : {
+          "type" : "number",
+          "example" : 1.0
+        }
+      },
+      "example" : {
+        "error_message" : "error_message",
+        "error_code" : 0.0,
+        "validation_errors" : "",
+        "api_version" : 1.0,
+        "node_id" : "machine1",
+        "successful" : true
+      }
+    },
+    "placeInDto" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "2nd floor"
+        }
+      }
+    },
+    "placeOutDto" : {
+      "type" : "object",
+      "required" : [ "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "2nd floor"
+        }
+      },
+      "example" : {
+        "name" : "2nd floor",
+        "id" : 1
+      }
+    },
+    "keyOutDto" : {
+      "type" : "object",
+      "required" : [ "access_key", "id", "name", "person_id" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Phone, Key, Credit card, etc."
+        },
+        "access_key" : {
+          "type" : "string",
+          "example" : "ae2d234f455ec873987234bd4a32c"
+        },
+        "person_id" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      },
+      "example" : {
+        "access_key" : "ae2d234f455ec873987234bd4a32c",
+        "name" : "Phone, Key, Credit card, etc.",
+        "id" : 1,
+        "person_id" : 1
+      }
+    },
+    "keyInDto" : {
+      "type" : "object",
+      "required" : [ "access_key", "name", "person_id" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "Phone, Key, Credit card, etc."
+        },
+        "access_key" : {
+          "type" : "string",
+          "example" : "ae2d234f455ec873987234bd4a32c"
+        },
+        "person_id" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      }
+    },
+    "personInDto" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "John Doe"
+        }
+      }
+    },
+    "personOutDto" : {
+      "type" : "object",
+      "required" : [ "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "John Doe"
+        }
+      },
+      "example" : {
+        "name" : "John Doe",
+        "id" : 1
+      }
+    },
+    "roleOutDto" : {
+      "type" : "object",
+      "required" : [ "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Employee from 1st floor"
+        }
+      },
+      "example" : {
+        "name" : "Employee from 1st floor",
+        "id" : 1
+      }
+    },
+    "roleInDto" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "Employee from 1st floor"
+        }
+      }
+    },
+    "personAclOutDto" : {
+      "type" : "object",
+      "required" : [ "id", "person_id", "place_id", "type" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "place_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "person_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "type" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      },
+      "example" : {
+        "id" : 1,
+        "type" : 1,
+        "place_id" : 1,
+        "person_id" : 1
+      }
+    },
+    "roleAclOutDto" : {
+      "type" : "object",
+      "required" : [ "id", "place_id", "role_id", "type" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "place_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "role_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "type" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      },
+      "example" : {
+        "role_id" : 1,
+        "id" : 1,
+        "type" : 1,
+        "place_id" : 1
+      }
+    },
+    "patternOutDto" : {
+      "type" : "object",
+      "required" : [ "acl_id", "days_of_month", "days_of_week", "from_time", "id", "months", "until_time" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "acl_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "from_time" : {
+          "type" : "string",
+          "example" : "02:00:00"
+        },
+        "until_time" : {
+          "type" : "string",
+          "example" : "22:00:00"
+        },
+        "days_of_week" : {
+          "type" : "array",
+          "example" : [ 1, 2, 5, 7 ],
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "days_of_month" : {
+          "type" : "array",
+          "example" : [ 1, 5, 8, 26, 31 ],
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "months" : {
+          "type" : "array",
+          "example" : [ 1, 2, 5, 6, 11, 12 ],
+          "items" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "example" : {
+        "days_of_week" : [ 1, 2, 5, 7 ],
+        "months" : [ 1, 2, 5, 6, 11, 12 ],
+        "until_time" : "22:00:00",
+        "days_of_month" : [ 1, 5, 8, 26, 31 ],
+        "id" : 1,
+        "acl_id" : 1,
+        "from_time" : "02:00:00"
+      }
+    },
+    "patternInDto" : {
+      "type" : "object",
+      "required" : [ "days_of_month", "days_of_week", "from_time", "months", "until_time" ],
+      "properties" : {
+        "from_time" : {
+          "type" : "string",
+          "example" : "02:00:00"
+        },
+        "until_time" : {
+          "type" : "string",
+          "example" : "22:00:00"
+        },
+        "days_of_week" : {
+          "type" : "array",
+          "example" : [ 1, 2, 5, 7 ],
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "days_of_month" : {
+          "type" : "array",
+          "example" : [ 1, 5, 8, 26, 31 ],
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "months" : {
+          "type" : "array",
+          "example" : [ 1, 2, 5, 6, 11, 12 ],
+          "items" : {
+            "type" : "integer"
+          }
+        }
+      }
+    },
+    "resolvedPatternOutDto" : {
+      "type" : "object",
+      "required" : [ "days_of_month", "days_of_week", "from_time", "months", "until_time" ],
+      "properties" : {
+        "from_time" : {
+          "type" : "string",
+          "example" : "02:00:00"
+        },
+        "until_time" : {
+          "type" : "string",
+          "example" : "22:00:00"
+        },
+        "days_of_week" : {
+          "type" : "array",
+          "example" : [ 1, 2, 5, 7 ],
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "days_of_month" : {
+          "type" : "array",
+          "example" : [ 1, 5, 8, 26, 31 ],
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "months" : {
+          "type" : "array",
+          "example" : [ 1, 2, 5, 6, 11, 12 ],
+          "items" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "example" : {
+        "days_of_week" : [ 1, 2, 5, 7 ],
+        "months" : [ 1, 2, 5, 6, 11, 12 ],
+        "until_time" : "22:00:00",
+        "days_of_month" : [ 1, 5, 8, 26, 31 ],
+        "from_time" : "02:00:00"
+      }
+    },
+    "resolvedAclOutDto" : {
+      "type" : "object",
+      "required" : [ "date_time_pattern", "door", "key", "type" ],
+      "properties" : {
+        "key" : {
+          "type" : "string",
+          "example" : "ab23c7e6576d1231a6786fa76712"
+        },
+        "door" : {
+          "type" : "string",
+          "example" : "1234cd8f987ab86c98667aaaf78c"
+        },
+        "type" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "date_time_pattern" : {
+          "$ref" : "#/definitions/resolvedPatternOutDto"
+        }
+      },
+      "example" : {
+        "door" : "1234cd8f987ab86c98667aaaf78c",
+        "date_time_pattern" : {
+          "days_of_week" : [ 1, 2, 5, 7 ],
+          "months" : [ 1, 2, 5, 6, 11, 12 ],
+          "until_time" : "22:00:00",
+          "days_of_month" : [ 1, 5, 8, 26, 31 ],
+          "from_time" : "02:00:00"
+        },
+        "type" : 1,
+        "key" : "ab23c7e6576d1231a6786fa76712"
+      }
+    },
+    "emptyOkResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "type" : "object",
+          "properties" : { }
+        }
+      },
+      "example" : {
+        "payload" : "{}",
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "userInfoResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/userOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "last_name" : "My Last name",
+          "groups" : [ {
+            "name" : "admin",
+            "id" : 1
+          }, {
+            "name" : "admin",
+            "id" : 1
+          } ],
+          "id" : 1,
+          "first_name" : "My First name",
+          "email" : "email@example.net",
+          "username" : "mylogin"
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "controllerResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/controllerOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "controller_id" : "3474687a23cd34e98f1233522345",
+          "name" : "Controller in server room",
+          "id" : 0
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allControllersResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allControllersResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "controller_id" : "3474687a23cd34e98f1233522345",
+            "name" : "Controller in server room",
+            "id" : 0
+          }, {
+            "controller_id" : "3474687a23cd34e98f1233522345",
+            "name" : "Controller in server room",
+            "id" : 0
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "doorResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/doorOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "name" : "Door to main hall",
+          "access_id" : "a26d6bc532532e34ca6",
+          "id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allDoorsResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allDoorsResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "name" : "Door to main hall",
+            "access_id" : "a26d6bc532532e34ca6",
+            "id" : 1
+          }, {
+            "name" : "Door to main hall",
+            "access_id" : "a26d6bc532532e34ca6",
+            "id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "placeResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/placeOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "name" : "2nd floor",
+          "id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allPlacesResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allPlacesResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "name" : "2nd floor",
+            "id" : 1
+          }, {
+            "name" : "2nd floor",
+            "id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "personResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/personOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "name" : "John Doe",
+          "id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allPersonnelResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allPersonnelResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "name" : "John Doe",
+            "id" : 1
+          }, {
+            "name" : "John Doe",
+            "id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "keyResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/keyOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "access_key" : "ae2d234f455ec873987234bd4a32c",
+          "name" : "Phone, Key, Credit card, etc.",
+          "id" : 1,
+          "person_id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allKeysResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allKeysResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "access_key" : "ae2d234f455ec873987234bd4a32c",
+            "name" : "Phone, Key, Credit card, etc.",
+            "id" : 1,
+            "person_id" : 1
+          }, {
+            "access_key" : "ae2d234f455ec873987234bd4a32c",
+            "name" : "Phone, Key, Credit card, etc.",
+            "id" : 1,
+            "person_id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "roleResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/roleOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "name" : "Employee from 1st floor",
+          "id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allRolesResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allRolesResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "name" : "Employee from 1st floor",
+            "id" : 1
+          }, {
+            "name" : "Employee from 1st floor",
+            "id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "roleAclResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/roleAclOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "role_id" : 1,
+          "id" : 1,
+          "type" : 1,
+          "place_id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allRoleAclsResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allRoleAclsResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "role_id" : 1,
+            "id" : 1,
+            "type" : 1,
+            "place_id" : 1
+          }, {
+            "role_id" : 1,
+            "id" : 1,
+            "type" : 1,
+            "place_id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "personAclResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/personAclOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "id" : 1,
+          "type" : 1,
+          "place_id" : 1,
+          "person_id" : 1
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allPersonAclsResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allPersonAclsResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "id" : 1,
+            "type" : 1,
+            "place_id" : 1,
+            "person_id" : 1
+          }, {
+            "id" : 1,
+            "type" : 1,
+            "place_id" : 1,
+            "person_id" : 1
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "patternResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/patternOutDto"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "days_of_week" : [ 1, 2, 5, 7 ],
+          "months" : [ 1, 2, 5, 6, 11, 12 ],
+          "until_time" : "22:00:00",
+          "days_of_month" : [ 1, 5, 8, 26, 31 ],
+          "id" : 1,
+          "acl_id" : 1,
+          "from_time" : "02:00:00"
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allPatternsResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allPatternsResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "days_of_week" : [ 1, 2, 5, 7 ],
+            "months" : [ 1, 2, 5, 6, 11, 12 ],
+            "until_time" : "22:00:00",
+            "days_of_month" : [ 1, 5, 8, 26, 31 ],
+            "id" : 1,
+            "acl_id" : 1,
+            "from_time" : "02:00:00"
+          }, {
+            "days_of_week" : [ 1, 2, 5, 7 ],
+            "months" : [ 1, 2, 5, 6, 11, 12 ],
+            "until_time" : "22:00:00",
+            "days_of_month" : [ 1, 5, 8, 26, 31 ],
+            "id" : 1,
+            "acl_id" : 1,
+            "from_time" : "02:00:00"
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allResolvedAclResponse" : {
+      "type" : "object",
+      "required" : [ "payload", "service" ],
+      "properties" : {
+        "service" : {
+          "$ref" : "#/definitions/serviceObject"
+        },
+        "payload" : {
+          "$ref" : "#/definitions/allResolvedAclResponse_payload"
+        }
+      },
+      "example" : {
+        "payload" : {
+          "items" : [ {
+            "door" : "1234cd8f987ab86c98667aaaf78c",
+            "date_time_pattern" : {
+              "days_of_week" : [ 1, 2, 5, 7 ],
+              "months" : [ 1, 2, 5, 6, 11, 12 ],
+              "until_time" : "22:00:00",
+              "days_of_month" : [ 1, 5, 8, 26, 31 ],
+              "from_time" : "02:00:00"
+            },
+            "type" : 1,
+            "key" : "ab23c7e6576d1231a6786fa76712"
+          }, {
+            "door" : "1234cd8f987ab86c98667aaaf78c",
+            "date_time_pattern" : {
+              "days_of_week" : [ 1, 2, 5, 7 ],
+              "months" : [ 1, 2, 5, 6, 11, 12 ],
+              "until_time" : "22:00:00",
+              "days_of_month" : [ 1, 5, 8, 26, 31 ],
+              "from_time" : "02:00:00"
+            },
+            "type" : 1,
+            "key" : "ab23c7e6576d1231a6786fa76712"
+          } ]
+        },
+        "service" : {
+          "error_message" : "error_message",
+          "error_code" : 0.0,
+          "validation_errors" : "",
+          "api_version" : 1.0,
+          "node_id" : "machine1",
+          "successful" : true
+        }
+      }
+    },
+    "allControllersResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/controllerOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "controller_id" : "3474687a23cd34e98f1233522345",
+          "name" : "Controller in server room",
+          "id" : 0
+        }, {
+          "controller_id" : "3474687a23cd34e98f1233522345",
+          "name" : "Controller in server room",
+          "id" : 0
+        } ]
+      }
+    },
+    "allDoorsResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/doorOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "name" : "Door to main hall",
+          "access_id" : "a26d6bc532532e34ca6",
+          "id" : 1
+        }, {
+          "name" : "Door to main hall",
+          "access_id" : "a26d6bc532532e34ca6",
+          "id" : 1
+        } ]
+      }
+    },
+    "allPlacesResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/placeOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "name" : "2nd floor",
+          "id" : 1
+        }, {
+          "name" : "2nd floor",
+          "id" : 1
+        } ]
+      }
+    },
+    "allPersonnelResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/personOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "name" : "John Doe",
+          "id" : 1
+        }, {
+          "name" : "John Doe",
+          "id" : 1
+        } ]
+      }
+    },
+    "allKeysResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/keyOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "access_key" : "ae2d234f455ec873987234bd4a32c",
+          "name" : "Phone, Key, Credit card, etc.",
+          "id" : 1,
+          "person_id" : 1
+        }, {
+          "access_key" : "ae2d234f455ec873987234bd4a32c",
+          "name" : "Phone, Key, Credit card, etc.",
+          "id" : 1,
+          "person_id" : 1
+        } ]
+      }
+    },
+    "allRolesResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/roleOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "name" : "Employee from 1st floor",
+          "id" : 1
+        }, {
+          "name" : "Employee from 1st floor",
+          "id" : 1
+        } ]
+      }
+    },
+    "allRoleAclsResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/roleAclOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "role_id" : 1,
+          "id" : 1,
+          "type" : 1,
+          "place_id" : 1
+        }, {
+          "role_id" : 1,
+          "id" : 1,
+          "type" : 1,
+          "place_id" : 1
+        } ]
+      }
+    },
+    "allPersonAclsResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/personAclOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "id" : 1,
+          "type" : 1,
+          "place_id" : 1,
+          "person_id" : 1
+        }, {
+          "id" : 1,
+          "type" : 1,
+          "place_id" : 1,
+          "person_id" : 1
+        } ]
+      }
+    },
+    "allPatternsResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/patternOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "days_of_week" : [ 1, 2, 5, 7 ],
+          "months" : [ 1, 2, 5, 6, 11, 12 ],
+          "until_time" : "22:00:00",
+          "days_of_month" : [ 1, 5, 8, 26, 31 ],
+          "id" : 1,
+          "acl_id" : 1,
+          "from_time" : "02:00:00"
+        }, {
+          "days_of_week" : [ 1, 2, 5, 7 ],
+          "months" : [ 1, 2, 5, 6, 11, 12 ],
+          "until_time" : "22:00:00",
+          "days_of_month" : [ 1, 5, 8, 26, 31 ],
+          "id" : 1,
+          "acl_id" : 1,
+          "from_time" : "02:00:00"
+        } ]
+      }
+    },
+    "allResolvedAclResponse_payload" : {
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/resolvedAclOutDto"
+          }
+        }
+      },
+      "example" : {
+        "items" : [ {
+          "door" : "1234cd8f987ab86c98667aaaf78c",
+          "date_time_pattern" : {
+            "days_of_week" : [ 1, 2, 5, 7 ],
+            "months" : [ 1, 2, 5, 6, 11, 12 ],
+            "until_time" : "22:00:00",
+            "days_of_month" : [ 1, 5, 8, 26, 31 ],
+            "from_time" : "02:00:00"
+          },
+          "type" : 1,
+          "key" : "ab23c7e6576d1231a6786fa76712"
+        }, {
+          "door" : "1234cd8f987ab86c98667aaaf78c",
+          "date_time_pattern" : {
+            "days_of_week" : [ 1, 2, 5, 7 ],
+            "months" : [ 1, 2, 5, 6, 11, 12 ],
+            "until_time" : "22:00:00",
+            "days_of_month" : [ 1, 5, 8, 26, 31 ],
+            "from_time" : "02:00:00"
+          },
+          "type" : 1,
+          "key" : "ab23c7e6576d1231a6786fa76712"
+        } ]
+      }
+    }
+  }
+}
