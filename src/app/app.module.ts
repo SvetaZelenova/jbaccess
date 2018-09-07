@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
 import { PersonnelComponent } from './personnel/personnel.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { HttpClientModule} from "@angular/common/http";
+import { ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { AppRoutingModule } from './/app-routing.module';
     MenuModule,
     ButtonModule,
     DialogModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,55 @@
-<p>
-  personnel works!
-</p>
+<p-button styleClass="ui-button-primary" label="Add" (onClick)="addPersonDialogOpen($event)"></p-button>
+
+<p-table [value]="personnel">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Keys</th>
+      <th>Roles</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-person>
+    <tr>
+      <td>{{person.id}}</td>
+      <td>{{person.name}}</td>
+      <td>
+        {{person.keys}}
+        <p-button label="+" (onClick)="openKeysList($event)"></p-button>
+      </td>
+      <td>
+        {{person.roles}}
+        <p-button label="+" (onClick)="openRolesList($event)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog header="Add new User" [modal]="true" [(visible)]="displayAddPersonDialog">
+  <p-header></p-header>
+  <form [formGroup]="newUserForm" (submit)="onSubmit()">
+    <div class="ui-inputgroup">
+      <span class="ui-inputgroup-addon">First Name</span>
+      <input
+        type="text"
+        class="ui-inputtext ui-corner-all ui-state-default ui-widget"
+        pInputText
+        placeholder="First Name"
+        formControlName="firstName"
+        required>
+    </div>
+    <br>
+    <div class="ui-inputgroup">
+      <span class="ui-inputgroup-addon">Last Name</span>
+      <input
+        type="text"
+        class="ui-inputtext ui-corner-all ui-state-default ui-widget"
+        pInputText
+        placeholder="Last Name"
+        formControlName="lastName"
+        required>
+    </div>
+    <br>
+    <p-button styleClass="ui-button-info" label="Create" type="submit"></p-button>
+  </form>
+</p-dialog>
