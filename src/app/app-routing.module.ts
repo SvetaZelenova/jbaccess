@@ -12,7 +12,7 @@ const routes: Routes = [
     component: AdminComponent,
     canActivate: [AuthGuard],
     children: [
-      {path: '', component: PersonnelComponent},
+      {path: 'person', component: PersonnelComponent},
       {path: 'places', component: PlacesComponent}
     ]
   },

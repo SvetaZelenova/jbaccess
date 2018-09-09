@@ -24,7 +24,8 @@ export class LoginComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res)
-          this.router.navigate(['/person'])
+          this.router.navigate(['person'])
+          this.loginService.setLoggedIn(true)
         },
         err => console.log(err)
       )
