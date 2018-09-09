@@ -13,12 +13,14 @@ import { PersonnelComponent } from './personnel/personnel.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { HttpClientModule} from "@angular/common/http";
 import { ReactiveFormsModule} from "@angular/forms";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlacesComponent,
-    PersonnelComponent
+    PersonnelComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

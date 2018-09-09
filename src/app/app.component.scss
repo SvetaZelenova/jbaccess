@@ -1,4 +1,9 @@
- div {
+$main-color: #dce7ff;
+div {
   margin:0;
   padding: 0;
+}
+.header {
+  padding: 20px 10px;
+  background: $main-color;
 }
