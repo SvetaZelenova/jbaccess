@@ -23,4 +23,7 @@ export class LoginService {
   setLoggedIn(value: boolean) {
     this.loggedInStatus = value
   }
+  get isLoggedIn() {
+    return this.loggedInStatus
+  }
 }
