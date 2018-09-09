@@ -27,7 +27,9 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['person'])
           this.loginService.setLoggedIn(true)
         },
-        err => console.log(err)
+        err => {
+          console.log(err)
+        }
       )
   }
 }

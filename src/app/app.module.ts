@@ -15,6 +15,8 @@ import { HttpClientModule} from "@angular/common/http";
 import { ReactiveFormsModule} from "@angular/forms";
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
+import {LoginService} from "./login/login.service";
+import {AccessDataService} from "./access-data.service";
 
 @NgModule({
   declarations: [
@@ -36,7 +38,7 @@ import { AdminComponent } from './admin/admin.component';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [LoginService, AccessDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
