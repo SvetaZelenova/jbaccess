@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
 import { PersonnelComponent } from './personnel/personnel.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiModule, BASE_PATH, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
+import { ApiModule, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment'
 
