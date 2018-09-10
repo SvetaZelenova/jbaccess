@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "@anatolyua/jbaccess-client-open-api": "^1.0.0-SNAPSHOT.201809070509",
     "@angular/animations": "^6.1.6",
     "@angular/common": "^6.0.2",
     "@angular/compiler": "^6.0.2",

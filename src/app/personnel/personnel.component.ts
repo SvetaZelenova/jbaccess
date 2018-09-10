@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AccessDataService } from "../access-data.service";
+import { PersonnelService, AllPersonnelResponse, AllPersonnelResponsePayload, ServiceObject, PersonOutDto } from  '@anatolyua/jbaccess-client-open-api';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import { IPerson } from "../access";
 
 @Component({
   selector: 'app-personnel',
@@ -10,23 +9,28 @@ import { IPerson } from "../access";
 })
 export class PersonnelComponent implements OnInit {
 
+  persons : PersonOutDto[];
+  cols: any[];
   newUserForm: FormGroup;
+  constructor( private ps: PersonnelService, private fb:FormBuilder) {
 
-  public personnel: IPerson [];
-
-  constructor(private _accessDataService: AccessDataService, private fb:FormBuilder) {}
-
-
+  }
 
   ngOnInit() {
-    this._accessDataService.getPersonData()
-        .subscribe(data =>
-          this.personnel = data
-        );
+    this.ps.getAllPersonnel()
+      .subscribe(data => {
+        this.persons = <PersonOutDto[]> data.payload;
+        console.log(data);
+      });
     this.newUserForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required]
     });
+
+    this.cols = [
+        { field: 'id', header: 'Id' },
+        { field: 'name', header: 'Name' }
+    ];
   }
   displayAddPersonDialog: boolean = false;
   displayKeysListDialog: boolean = false;

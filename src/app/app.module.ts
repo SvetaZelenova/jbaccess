@@ -10,8 +10,10 @@ import {DialogModule} from 'primeng/dialog';
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
 import { PersonnelComponent } from './personnel/personnel.component';
-import { AppRoutingModule } from './/app-routing.module';
-import { HttpClientModule} from "@angular/common/http";
+import { AppRoutingModule } from './app-routing.module';
+import { ApiModule, BASE_PATH } from '@anatolyua/jbaccess-client-open-api';
+import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../environments/environment';
 import { ReactiveFormsModule} from "@angular/forms";
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
@@ -36,9 +38,11 @@ import {AccessDataService} from "./access-data.service";
     DialogModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ApiModule
   ],
-  providers: [LoginService, AccessDataService],
+  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH },
+              LoginService, AccessDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
