@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
 import { PersonnelComponent } from './personnel/personnel.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiModule, BASE_PATH } from '@anatolyua/jbaccess-client-open-api';
+import { ApiModule, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { ReactiveFormsModule} from "@angular/forms";
@@ -19,6 +19,14 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import {LoginService} from "./login/login.service";
 import {AccessDataService} from "./access-data.service";
+
+export function apiConfigFactory (): Configuration  {
+  const params: ConfigurationParameters = {
+    basePath: environment.API_BASE_PATH,
+    withCredentials: true
+  }
+  return new Configuration(params);
+}
 
 @NgModule({
   declarations: [
@@ -38,11 +46,10 @@ import {AccessDataService} from "./access-data.service";
     DialogModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    ApiModule
+    ApiModule.forRoot(apiConfigFactory),
+    ReactiveFormsModule
   ],
-  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH },
-              LoginService, AccessDataService],
+  providers: [LoginService, AccessDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
