@@ -9,16 +9,13 @@ import {Observable} from "rxjs/index";
 export class LoginService {
   private loggedInStatus: boolean = false;
 
-  private logInUrl = 'http://127.0.0.1:8000/security/login'
-  private logoutUrl = 'http://127.0.0.1:8000/security/logout'
-
   constructor(private http: HttpClient) { }
 
   loginUser(user): Observable<IAuth[]> {
-    return this.http.post<IAuth[]>(this.logInUrl, user)
+    return this.http.post<IAuth[]>('/security/login', user, { withCredentials: true})
   }
   logoutUser() {
-    return this.http.get(this.logoutUrl)
+    return this.http.get('/security/logout')
   }
   setLoggedIn(value: boolean) {
     this.loggedInStatus = value
