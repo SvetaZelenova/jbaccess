@@ -10,7 +10,10 @@ import {DialogModule} from 'primeng/dialog';
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
 import { PersonnelComponent } from './personnel/personnel.component';
-import { AppRoutingModule } from './/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
+import { ApiModule, BASE_PATH } from '@anatolyua/jbaccess-client-open-api';
+import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../environments/environment'
 
 @NgModule({
   declarations: [
@@ -26,9 +29,11 @@ import { AppRoutingModule } from './/app-routing.module';
     MenuModule,
     ButtonModule,
     DialogModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ApiModule
   ],
-  providers: [],
+  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
