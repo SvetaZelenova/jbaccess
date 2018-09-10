@@ -11,9 +11,17 @@ import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
 import { PersonnelComponent } from './personnel/personnel.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiModule, BASE_PATH } from '@anatolyua/jbaccess-client-open-api';
+import { ApiModule, BASE_PATH, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment'
+
+export function apiConfigFactory (): Configuration  {
+  const params: ConfigurationParameters = {
+    basePath: environment.API_BASE_PATH,
+    withCredentials: true
+  }
+  return new Configuration(params);
+}
 
 @NgModule({
   declarations: [
@@ -31,9 +39,9 @@ import { environment } from '../environments/environment'
     DialogModule,
     AppRoutingModule,
     HttpClientModule,
-    ApiModule
+    ApiModule.forRoot(apiConfigFactory)
   ],
-  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
+  providers: [], //{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }
   bootstrap: [AppComponent]
 })
 export class AppModule { }
