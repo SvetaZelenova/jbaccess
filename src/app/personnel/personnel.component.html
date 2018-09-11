@@ -29,24 +29,13 @@
   <p-header></p-header>
   <form [formGroup]="newUserForm" (submit)="onSubmit()">
     <div class="ui-inputgroup">
-      <span class="ui-inputgroup-addon">First Name</span>
+      <span class="ui-inputgroup-addon">Name</span>
       <input
         type="text"
         class="ui-inputtext ui-corner-all ui-state-default ui-widget"
         pInputText
-        placeholder="First Name"
-        formControlName="firstName"
-        required>
-    </div>
-    <br>
-    <div class="ui-inputgroup">
-      <span class="ui-inputgroup-addon">Last Name</span>
-      <input
-        type="text"
-        class="ui-inputtext ui-corner-all ui-state-default ui-widget"
-        pInputText
-        placeholder="Last Name"
-        formControlName="lastName"
+        placeholder="User Name"
+        formControlName="userName"
         required>
     </div>
     <br>
