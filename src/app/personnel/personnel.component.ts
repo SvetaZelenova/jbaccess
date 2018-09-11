@@ -17,28 +17,29 @@ export class PersonnelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ps.getAllPersonnel()
-      .subscribe(data => {
-        this.persons = <PersonOutDto[]> data.payload;
-        console.log(data);
-      });
-    this.newUserForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
-    });
+    this.loadPersonnel()
 
-    this.cols = [
-        { field: 'id', header: 'Id' },
-        { field: 'name', header: 'Name' }
-    ];
+    this.newUserForm = this.fb.group({
+      userName: ['', Validators.required]
+    });
   }
   displayAddPersonDialog: boolean = false;
   displayKeysListDialog: boolean = false;
   displayRolesListDialog: boolean = false;
 
+  loadPersonnel() {
+    this.ps.getAllPersonnel()
+      .subscribe(data => {
+        this.persons = <PersonOutDto[]> data.payload;
+        console.log(data);
+      });
+  }
   addPersonDialogOpen() {
     this.displayAddPersonDialog = true;
   };
+  addPersonDialogClose() {
+    this.displayAddPersonDialog = false;
+  }
   openKeysList() {
     this.displayKeysListDialog = true;
   };
@@ -53,10 +54,13 @@ export class PersonnelComponent implements OnInit {
   };
 
   onSubmit() {
-    let name = this.newUserForm.value['firstName'] + ' ' + this.newUserForm.value['lastName'];
+    let name = this.newUserForm.value['userName'];
     this.ps.createPerson({name} as PersonOutDto)
       .subscribe(
-        data => console.log('Succes!', data),
+        () => {
+          this.loadPersonnel()
+          this.addPersonDialogClose()
+        },
         error => console.log('Error!', error)
       )
   }
