@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit {
 
   logInForm: FormGroup;
@@ -18,6 +19,21 @@ export class LoginComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    this.securityService.restoreSession().subscribe(
+      res => {
+        if(res.service.successful) {
+          console.log("Session restored, user is " + res.payload.username)
+          this.loginService.setLoggedIn(true)
+          this.router.navigate(['person']);
+        }
+      },
+      err => {
+        console.log(err)
+      }
+    )
+    if(this.loginService.isLoggedIn) {
+      this.router.navigate(['person'])
+    }
     this.logInForm = this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required]
