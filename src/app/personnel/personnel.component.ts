@@ -54,7 +54,7 @@ export class PersonnelComponent implements OnInit {
 
   onSubmit() {
     let name = this.newUserForm.value['firstName'] + ' ' + this.newUserForm.value['lastName'];
-    this._accessDataService.addPersonName({name} as IPerson)
+    this.ps.createPerson({name} as PersonOutDto)
       .subscribe(
         data => console.log('Succes!', data),
         error => console.log('Error!', error)

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MenuItem} from "primeng/api";
 import {LoginService} from "../login/login.service";
+import {SecurityService} from "@anatolyua/jbaccess-client-open-api";
 import {Router} from "@angular/router";
 
 @Component({
@@ -10,7 +11,8 @@ import {Router} from "@angular/router";
 })
 export class AdminComponent implements OnInit {
   items: MenuItem[]
-  constructor(private loginService: LoginService,
+  constructor(private securityService: SecurityService,
+              private loginService: LoginService,
               private router: Router) { }
 
   ngOnInit() {
@@ -24,7 +26,7 @@ export class AdminComponent implements OnInit {
     }]
   }
   logOut() {
-    this.loginService.logoutUser()
+    this.securityService.logout()
       .subscribe(
         res => {
           console.log(res)

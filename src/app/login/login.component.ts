@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoginService} from "./login.service";
+import {SecurityService} from "@anatolyua/jbaccess-client-open-api";
 import {Router} from "@angular/router";
 
 @Component({
@@ -11,7 +12,10 @@ import {Router} from "@angular/router";
 export class LoginComponent implements OnInit {
 
   logInForm: FormGroup;
-  constructor(private fb: FormBuilder, private loginService: LoginService, private router: Router) { }
+  constructor(private fb: FormBuilder,
+              private loginService: LoginService,
+              private securityService: SecurityService,
+              private router: Router) { }
 
   ngOnInit() {
     this.logInForm = this.fb.group({
@@ -20,7 +24,7 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmit() {
-    this.loginService.loginUser(this.logInForm.value)
+    this.securityService.login(this.logInForm.value)
       .subscribe(
         res => {
           console.log(res)

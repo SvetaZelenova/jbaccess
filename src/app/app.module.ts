@@ -18,7 +18,6 @@ import { ReactiveFormsModule} from "@angular/forms";
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import {LoginService} from "./login/login.service";
-import {AccessDataService} from "./access-data.service";
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -49,7 +48,7 @@ export function apiConfigFactory (): Configuration  {
     ApiModule.forRoot(apiConfigFactory),
     ReactiveFormsModule
   ],
-  providers: [LoginService, AccessDataService],
+  providers: [LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
