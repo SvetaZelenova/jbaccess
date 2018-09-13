@@ -1,12 +1,41 @@
-<div class="ui-g">
-  <div class="ui-g-2">
-    <p-menu [model]="items" class="sidemenu"></p-menu>
-  </div>
-  <div class="ui-g-10">
-    <div class="ui-g-12 header">
-      <p-button label="Log out" (onClick)="logOut()"></p-button>
+<div class="p-grid wrapper_layout">
+  <div id="header_layout" class="p-col-12">
+    <div class="p-grid p-justify-between">
+      <p-button class="toggle_btn" icon="fa fa-bars"></p-button>
+      <div>
+        <h1 class="logo_name">JBaccess</h1>
+      </div>
+      <p-button class="logout_btn" (onClick)="logOut()" label="Log out"></p-button>
     </div>
-    <div class="ui-g-12">
+  </div>
+  <div id="sidebar_layout" class="p-col-12 p-md-2 p-lg-3 p-col-nogutter">
+    <div class="p-col-12">
+      <ul>
+        <li>
+          <i class="fa fa-users"></i>
+          <a routerLink="/person">Personnel</a>
+        </li>
+        <li>
+          <i class="fa fa-building"></i>
+          <a routerLink="/places">Places</a>
+        </li>
+        <li>
+          <i class="fa fa-key"></i>
+          <a routerLink="">Keys</a>
+        </li>
+        <li>
+          <i class="fa fa-search"></i>
+          <a routerLink="">Doors</a>
+        </li>
+        <li>
+          <i class="fa fa-pencil"></i>
+          <a routerLink="">Roles</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="main_layout" class="p-col-12 p-md-10 p-lg-9">
+    <div class="p-col-12">
       <router-outlet> </router-outlet>
     </div>
   </div>
