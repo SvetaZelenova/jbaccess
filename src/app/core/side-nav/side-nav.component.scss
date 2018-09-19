@@ -1,0 +1,28 @@
+$main-color: #34393a;
+#sidebar_layout {
+  box-shadow: 0 0 5px 0 rgba(0,0,0,.3);
+  padding: 0 !important;
+
+  ul {
+    padding: 0;
+
+    li {
+      list-style: none;
+      display: block;
+      padding: 10px 10px 5px 15px;
+      cursor: pointer;
+      border-bottom: 1px solid #dce7ff;
+      color: $main-color;
+
+      i {
+
+      }
+
+      a {
+        text-decoration: none;
+        padding-left: 10px;
+        color: $main-color;
+      }
+    }
+  }
+}
