@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {SideNavService} from "../side-nav.service";
 
 @Component({
   selector: 'app-side-nav',
@@ -6,10 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnInit {
+  @HostBinding('class.toggle-nav')
+  showNav = false;
 
-  constructor() { }
+  constructor(private navService: SideNavService) { }
 
   ngOnInit() {
+    this.open()
   }
-
+  open() {
+    this.navService.change.subscribe(showNav => {
+      this.showNav = !this.showNav
+    })
+  }
 }

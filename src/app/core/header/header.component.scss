@@ -1,6 +1,6 @@
 @media screen and (max-width:768px) {
   #header_layout {
-    .toggle_btn {
+    div .toggle_btn {
       display: block;
     }
   }
@@ -22,4 +22,9 @@
   }
   .logout_btn {
   }
+}
+div {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
 }

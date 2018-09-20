@@ -1,14 +1,8 @@
 $main-color: #34393a;
 @media screen and (max-width:768px) {
   .wrapper_layout {
-
-    #sidebar_layout {
-    }
-
-    #header_layout {
-      .toggle_btn {
-        display: block;
-      }
+    .nav_wrapper app-side-nav{
+      display: none;
     }
   }
 }
@@ -22,4 +16,11 @@ div {
 #main_layout {
   padding: 10px 15px;
 }
-
+.nav_wrapper {
+  padding: 0 !important;
+}
+.wrapper_layout {
+  .nav_wrapper app-side-nav.toggle-nav{
+    display: block;
+  }
+}
