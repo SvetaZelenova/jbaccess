@@ -13,6 +13,7 @@ import { PlacesComponent } from './places/places.component';
 import { AdminComponent } from "./admin.component";
 
 import { CoreModule } from "../core/core.module";
+import { PersonDetailComponent } from './person-detail/person-detail.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { CoreModule } from "../core/core.module";
   declarations: [
     AdminComponent,
     PersonnelComponent,
-    PlacesComponent
+    PlacesComponent,
+    PersonDetailComponent
   ]
 })
 export class AdminModule { }

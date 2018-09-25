@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonnelService, AllPersonnelResponse, AllPersonnelResponsePayload, ServiceObject, PersonOutDto } from  '@anatolyua/jbaccess-client-open-api';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {PersonService} from "../personnel.service";
+import {User} from "../user.model";
 
 @Component({
   selector: 'app-personnel',
@@ -9,10 +10,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class PersonnelComponent implements OnInit {
 
-  persons : PersonOutDto[];
-  cols: any[];
+  persons : User[];
   newUserForm: FormGroup;
-  constructor( private ps: PersonnelService, private fb:FormBuilder) {
+  constructor( private ps: PersonService, private fb:FormBuilder) {
 
   }
 
@@ -25,14 +25,11 @@ export class PersonnelComponent implements OnInit {
   }
 
   displayAddPersonDialog: boolean = false;
-  displayKeysListDialog: boolean = false;
-  displayRolesListDialog: boolean = false;
-
 
   loadPersonnel() {
     this.ps.getAllPersonnel()
       .subscribe(data => {
-        this.persons = <PersonOutDto[]> data.payload;
+        this.persons = <User[]> data.payload;
         console.log(data);
       });
   }
@@ -42,22 +39,10 @@ export class PersonnelComponent implements OnInit {
   addPersonDialogClose() {
     this.displayAddPersonDialog = false;
   }
-  openKeysList() {
-    this.displayKeysListDialog = true;
-  };
-  openRolesList() {
-    this.displayRolesListDialog = true;
-  };
-  closeKeysList() {
-    this.displayKeysListDialog = false;
-  };
-  closeRolesList() {
-    this.displayRolesListDialog = false;
-  };
 
   onSubmit() {
     let name = this.newUserForm.value['userName'];
-    this.ps.createPerson({name} as PersonOutDto)
+    this.ps.createPerson({name} as User)
       .subscribe(
         () => {
           this.loadPersonnel()
@@ -65,6 +50,15 @@ export class PersonnelComponent implements OnInit {
         },
 
         error => console.log('Error!', error)
+      )
+  }
+
+  deleteUser(id) {
+    this.ps.deletePerson(id)
+      .subscribe(
+        () => {
+          this.loadPersonnel()
+        }
       )
   }
 }
