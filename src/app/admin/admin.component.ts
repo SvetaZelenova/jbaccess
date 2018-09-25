@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {MenuItem} from "primeng/api";
-import {LoginService} from "../login/login.service";
-import {SecurityService} from "@anatolyua/jbaccess-client-open-api";
-import {Router} from "@angular/router";
+import {MenuItem} from 'primeng/api';
+import {LoginService} from '../login/login.service';
+import {SecurityService} from '@anatolyua/jbaccess-client-open-api';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-admin',

@@ -2,10 +2,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {TableModule} from 'primeng/table';
-import {AngularFontAwesomeModule} from "angular-font-awesome";
+import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {MenuModule} from 'primeng/menu';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
+import {ListboxModule} from 'primeng/listbox';
 
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
@@ -14,10 +15,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { ReactiveFormsModule} from "@angular/forms";
+import { ReactiveFormsModule} from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
-import {LoginService} from "./login/login.service";
+import {LoginService} from './login/login.service';
+import { KeysComponent } from './keys/keys.component';
+import { KeysService } from './keys/keys.service';
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -33,7 +36,8 @@ export function apiConfigFactory (): Configuration  {
     PlacesComponent,
     PersonnelComponent,
     LoginComponent,
-    AdminComponent
+    AdminComponent,
+    KeysComponent
   ],
   imports: [
     BrowserModule,
@@ -43,12 +47,13 @@ export function apiConfigFactory (): Configuration  {
     MenuModule,
     ButtonModule,
     DialogModule,
+    ListboxModule,
     AppRoutingModule,
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     ReactiveFormsModule
   ],
-  providers: [LoginService],
+  providers: [LoginService, KeysService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

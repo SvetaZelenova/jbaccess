@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
-import {AdminComponent} from "./admin/admin.component";
-import {PersonnelComponent} from "./personnel/personnel.component";
-import {PlacesComponent} from "./places/places.component";
-import {LoginComponent} from "./login/login.component";
-import {AuthGuard} from "./auth.guard";
+import {RouterModule, Routes} from '@angular/router';
+import {AdminComponent} from './admin/admin.component';
+import {PersonnelComponent} from './personnel/personnel.component';
+import {PlacesComponent} from './places/places.component';
+import {LoginComponent} from './login/login.component';
+import {AuthGuard} from './auth.guard';
+import {KeysComponent} from './keys/keys.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'person', component: PersonnelComponent},
+      {path: 'keys', component: KeysComponent},
       {path: 'places', component: PlacesComponent}
     ]
   },
@@ -20,7 +22,7 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent
   }
-]
+];
 
 @NgModule({
   imports: [

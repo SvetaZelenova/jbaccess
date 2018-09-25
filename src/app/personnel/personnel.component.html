@@ -5,22 +5,14 @@
     <tr>
       <th>Id</th>
       <th>Name</th>
-      <th>Keys</th>
-      <th>Roles</th>
+      <th>&nbsp;</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-person>
     <tr>
       <td>{{person.id}}</td>
       <td>{{person.name}}</td>
-      <td>
-        {{person.keys}}
-        <p-button label="+" (onClick)="openKeysList($event)"></p-button>
-      </td>
-      <td>
-        {{person.roles}}
-        <p-button label="+" (onClick)="openRolesList($event)"></p-button>
-      </td>
+      <td><p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deletePerson(person.id)"></p-button></td>
     </tr>
   </ng-template>
 </p-table>
