@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { PersonnelService, PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PersonService} from "../personnel.service";
-import {User} from "../user.model";
 
 @Component({
   selector: 'app-personnel',
@@ -10,9 +10,12 @@ import {User} from "../user.model";
 })
 export class PersonnelComponent implements OnInit {
 
-  persons : User[];
+  persons: PersonOutDto[];
   newUserForm: FormGroup;
-  constructor( private ps: PersonService, private fb:FormBuilder) {
+
+  displayAddPersonDialog = false;
+
+  constructor( private ps: PersonService, private fb: FormBuilder) {
 
   }
 
@@ -23,8 +26,6 @@ export class PersonnelComponent implements OnInit {
       userName: ['', Validators.required]
     });
   }
-
-  displayAddPersonDialog: boolean = false;
 
   loadPersonnel() {
     this.ps.getAllPersonnel()
@@ -39,10 +40,16 @@ export class PersonnelComponent implements OnInit {
   addPersonDialogClose() {
     this.displayAddPersonDialog = false;
   }
+  deletePerson(id: number) {
+    this.ps.deletePerson(id).subscribe(
+      () => this.loadPersonnel(),
+      error => console.log(error)
+    )
+  }
 
   onSubmit() {
-    let name = this.newUserForm.value['userName'];
-    this.ps.createPerson({name} as User)
+    const name = this.newUserForm.value['userName'];
+    this.ps.createPerson({name} as PersonOutDto)
       .subscribe(
         () => {
           this.loadPersonnel()
@@ -50,15 +57,6 @@ export class PersonnelComponent implements OnInit {
         },
 
         error => console.log('Error!', error)
-      )
-  }
-
-  deleteUser(id) {
-    this.ps.deletePerson(id)
-      .subscribe(
-        () => {
-          this.loadPersonnel()
-        }
       )
   }
 }

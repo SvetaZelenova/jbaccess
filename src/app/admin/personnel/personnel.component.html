@@ -5,7 +5,7 @@
     <tr>
       <th>Id</th>
       <th>Name</th>
-      <th>Actions</th>
+      <th>&nbsp;</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-person>
@@ -14,7 +14,7 @@
       <td>{{person.name}}</td>
       <td>
         <button pButton type="button" label="Open" routerLink="/person/{{person.id}}" class="ui-button-raised ui-button-secondary"></button>
-        <button pButton type="button" label="Delete" (click)="deleteUser(person.id)" class="ui-button-raised ui-button-warning"></button>
+        <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deletePerson(person.id)"></p-button>
       </td>
     </tr>
   </ng-template>
