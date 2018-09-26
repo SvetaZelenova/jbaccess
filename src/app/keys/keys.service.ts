@@ -12,13 +12,21 @@ import { PersonnelService as PersonnelServiceAPI,
   KeysService as KeysServiceAPI,
   KeyOutDto,
   PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
+import {HandleError, HttpErrorHandler} from '../core/http-error-handler.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KeysService {
 
-  constructor(private keysService: KeysServiceAPI, private  personnelService: PersonnelServiceAPI, private http: HttpClient) { }
+  private handleError: HandleError;
+  constructor(
+    private keysService: KeysServiceAPI,
+    private  personnelService: PersonnelServiceAPI,
+    private http: HttpClient,
+    httpErrorHandler: HttpErrorHandler) {
+      this.handleError = httpErrorHandler.createHandleError('KeysService');
+  }
 
   loadKeys(): Observable<{keys: Key[], persons: Person[]}> {
     return zip(this.keysService.getAllKeys(), this.personnelService.getAllPersonnel())
@@ -44,18 +52,12 @@ export class KeysService {
       {access_key: key.accessKey, name: key.name, person_id: key.person.id},
       {withCredentials: true})
       .pipe(
-        catchError(this.handleError),
         map((data: any) => ({
           id: data.payload.id,
           name: data.payload.name,
           accessKey: data.payload.access_key,
-          person: key.person}))
+          person: key.person})),
+        catchError(this.handleError<Key>('createKey', key))
       );
   }
-  private handleError(error) {
-    console.log('---------- -------- ---------------');
-    console.log(error);
-    console.log('---------- -------- ---------------');
-    return throwError('Errors happen');
-  };
 }

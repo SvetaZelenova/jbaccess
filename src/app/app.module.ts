@@ -7,6 +7,8 @@ import {MenuModule} from 'primeng/menu';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
 import {ListboxModule} from 'primeng/listbox';
+import {ToastModule} from 'primeng/toast';
+import {MessageService} from 'primeng/api';
 
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
@@ -21,6 +23,7 @@ import { AdminComponent } from './admin/admin.component';
 import {LoginService} from './login/login.service';
 import { KeysComponent } from './keys/keys.component';
 import { KeysService } from './keys/keys.service';
+import {HttpErrorHandler} from './core/http-error-handler.service';
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -48,12 +51,13 @@ export function apiConfigFactory (): Configuration  {
     ButtonModule,
     DialogModule,
     ListboxModule,
+    ToastModule,
     AppRoutingModule,
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     ReactiveFormsModule
   ],
-  providers: [LoginService, KeysService],
+  providers: [LoginService, KeysService, HttpErrorHandler, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

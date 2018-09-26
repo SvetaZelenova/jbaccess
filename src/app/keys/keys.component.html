@@ -4,19 +4,15 @@
   <ng-template pTemplate="header">
     <tr>
       <th>Id</th>
-      <th>Name</th>
-      <th>accessKey</th>
-      <th>Person Id</th>
-      <th>Person Name</th>
+      <th>Name [<em>Access Key</em>]</th>
+      <th>Person</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-key>
     <tr>
       <td>{{key.id}}</td>
-      <td>{{key.name}}</td>
-      <td>{{key.accessKey}}</td>
-      <td>{{key.person?.id}}</td>
-      <td>{{key.person?.name}}</td>
+      <td>{{key.name}} [<em>{{key.accessKey}}</em>]</td>
+      <td>{{key.person?.id}} : {{key.person?.name}}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -30,7 +26,7 @@
         type="text"
         class="ui-inputtext ui-corner-all ui-state-default ui-widget"
         pInputText
-        placeholder="User Name"
+        placeholder="Key Name"
         formControlName="keyName"
         required>
     </div>
@@ -48,6 +44,6 @@
       <p-listbox [options]="persons" formControlName="keyPerson" optionLabel="name" filter="filter"></p-listbox>
     </div>
     <br>
-    <p-button styleClass="ui-button-info" label="Create" type="submit" [disabled]="!newKeyForm.valid"></p-button>
+    <p-button styleClass="ui-button-info" label="Create" type="submit" ></p-button>
   </form>
 </p-dialog>
