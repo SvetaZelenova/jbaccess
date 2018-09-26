@@ -1,3 +1,4 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
@@ -24,6 +25,7 @@ import {LoginService} from './login/login.service';
 import { KeysComponent } from './keys/keys.component';
 import { KeysService } from './keys/keys.service';
 import {HttpErrorHandler} from './core/http-error-handler.service';
+import {AuthInterceptor} from './auth.interceptor';
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -57,7 +59,13 @@ export function apiConfigFactory (): Configuration  {
     ApiModule.forRoot(apiConfigFactory),
     ReactiveFormsModule
   ],
-  providers: [LoginService, KeysService, HttpErrorHandler, MessageService],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    LoginService,
+    KeysService,
+    HttpErrorHandler,
+    MessageService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

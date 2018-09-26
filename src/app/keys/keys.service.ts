@@ -49,8 +49,8 @@ export class KeysService {
   }
   createKey(key: Key): Observable<Key> {
     return this.http.post(environment.API_BASE_PATH + '/keys',
-      {access_key: key.accessKey, name: key.name, person_id: key.person.id},
-      {withCredentials: true})
+      {access_key: key.accessKey, name: key.name, person_id: key.person.id}
+      )
       .pipe(
         map((data: any) => ({
           id: data.payload.id,
