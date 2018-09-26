@@ -44,6 +44,7 @@
       <p-listbox [options]="persons" formControlName="keyPerson" optionLabel="name" filter="filter"></p-listbox>
     </div>
     <br>
-    <p-button styleClass="ui-button-info" label="Create" type="submit" ></p-button>
+    <p-button styleClass="ui-button-info" label="Create" type="submit"></p-button>
+    <!-- [disabled]="!newKeyForm.valid" -->
   </form>
 </p-dialog>
