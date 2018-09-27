@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { PersonnelService, PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-personnel',
@@ -10,11 +13,12 @@ export class PersonnelComponent implements OnInit {
 
   persons: PersonOutDto[];
   newUserForm: FormGroup;
+  baseUrl: string;
 
   displayAddPersonDialog = false;
 
-  constructor( private ps: PersonnelService, private fb: FormBuilder) {
-
+  constructor( private ps: PersonnelService, private fb: FormBuilder, private http: HttpClient) {
+    this.baseUrl = environment.API_BASE_PATH + '/person';
   }
 
   ngOnInit() {
@@ -30,10 +34,10 @@ export class PersonnelComponent implements OnInit {
 
 
   loadPersonnel() {
-    this.ps.getAllPersonnel()
+    this.http.get<any>(this.baseUrl)
       .subscribe(data => {
-        this.persons = <PersonOutDto[]> data.payload;
         console.log(data);
+        this.persons = <PersonOutDto[]> data.payload;
       });
   }
   addPersonDialogOpen() {
@@ -54,7 +58,7 @@ export class PersonnelComponent implements OnInit {
     this.ps.createPerson({name} as PersonOutDto)
       .subscribe(
         () => {
-          this.loadPersonnel()
+          this.loadPersonnel();
           this.addPersonDialogClose()
         },
 

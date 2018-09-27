@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import {MessageService} from 'primeng/api';
 
 
@@ -44,8 +44,9 @@ export class HttpErrorHandler {
         sticky: true
       });
 
+      return throwError('error');
       // Let the app keep running by returning a safe result.
-      throw error;
+     //  throw error;
       // return of( result );
     };
 

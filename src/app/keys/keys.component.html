@@ -30,6 +30,7 @@
         formControlName="keyName"
         required>
     </div>
+    <p-message severity="error" text="Name is required" *ngIf="!newKeyForm.controls['keyName'].valid"></p-message>
     <div class="ui-inputgroup">
       <span class="ui-inputgroup-addon">Access Key</span>
       <input

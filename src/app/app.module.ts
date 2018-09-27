@@ -2,14 +2,16 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
-import {TableModule} from 'primeng/table';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import {TableModule} from 'primeng/table';
 import {MenuModule} from 'primeng/menu';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
 import {ListboxModule} from 'primeng/listbox';
 import {ToastModule} from 'primeng/toast';
 import {MessageService} from 'primeng/api';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
 
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './places/places.component';
@@ -26,6 +28,7 @@ import { KeysComponent } from './keys/keys.component';
 import { KeysService } from './keys/keys.service';
 import {HttpErrorHandler} from './core/http-error-handler.service';
 import {AuthInterceptor} from './auth.interceptor';
+import {CaseInterceptor} from './case-interceptor';
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -54,6 +57,8 @@ export function apiConfigFactory (): Configuration  {
     DialogModule,
     ListboxModule,
     ToastModule,
+    MessagesModule,
+    MessageModule,
     AppRoutingModule,
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
@@ -61,6 +66,7 @@ export function apiConfigFactory (): Configuration  {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CaseInterceptor, multi: true },
     LoginService,
     KeysService,
     HttpErrorHandler,
