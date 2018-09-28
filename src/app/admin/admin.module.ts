@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule} from "@angular/forms";
-
-import {TableModule} from 'primeng/table';
-import {AngularFontAwesomeModule} from "angular-font-awesome";
-import {ButtonModule} from 'primeng/button';
-import {DialogModule} from 'primeng/dialog';
+import {MessageService} from "primeng/api";
 
 import { AdminRoutingModule} from "./admin-routing.module";
 import { PersonnelComponent } from './personnel/personnel.component';
@@ -13,24 +9,27 @@ import { PlacesComponent } from './places/places.component';
 import { AdminComponent } from "./admin.component";
 
 import { CoreModule } from "../core/core.module";
+import { SharedModule} from "../shared/shared.module";
 import { PersonDetailComponent } from './person-detail/person-detail.component';
+import {KeysComponent} from "./keys/keys.component";
 
 @NgModule({
   imports: [
     CommonModule,
     AdminRoutingModule,
-    TableModule,
-    AngularFontAwesomeModule,
-    ButtonModule,
-    DialogModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
   declarations: [
     AdminComponent,
     PersonnelComponent,
     PlacesComponent,
-    PersonDetailComponent
+    PersonDetailComponent,
+    KeysComponent
+  ],
+  providers: [
+    MessageService
   ]
 })
 export class AdminModule { }

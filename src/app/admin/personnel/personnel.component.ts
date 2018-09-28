@@ -30,7 +30,7 @@ export class PersonnelComponent implements OnInit {
   loadPersonnel() {
     this.ps.getAllPersonnel()
       .subscribe(data => {
-        this.persons = <User[]> data.payload;
+        this.persons = <PersonOutDto[]> data.payload;
         console.log(data);
       });
   }

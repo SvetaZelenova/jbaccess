@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-
+import { Component, OnInit } from '@angular/core';
 import { Key } from './key'
 import { KeysService } from './keys.service'
-import {Person} from '../personnel/person';
+import {Person} from "../person";
+
 @Component({
   selector: 'app-keys',
   templateUrl: './keys.component.html'

@@ -1,4 +1,4 @@
-import { Person } from '../personnel/person'
+import { Person } from '../person'
 export interface Key {
   id: number
   name: string

@@ -14,9 +14,15 @@ export class AuthService {
               private router: Router) { }
 
   setLoggedIn(value: boolean) {
-    this.loggedInStatus = value
+    this.loggedInStatus = value;
+    if(localStorage) {
+      localStorage.setItem('loggedInStatus', JSON.stringify(this.loggedInStatus));
+    }
   }
   get isLoggedIn() {
+    if(localStorage) {
+      this.loggedInStatus = JSON.parse(localStorage.getItem('loggedInStatus'));
+    }
     return this.loggedInStatus
   }
   submit(data) {

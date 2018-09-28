@@ -6,6 +6,7 @@ import {PlacesComponent} from "./places/places.component";
 import {AdminComponent} from "./admin.component";
 import {PersonDetailComponent} from "./person-detail/person-detail.component";
 import {AuthGuard} from "../core/auth/auth.guard";
+import {KeysComponent} from "./keys/keys.component";
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'places',
         component: PlacesComponent
+      },
+      {
+        path: 'keys',
+        component: KeysComponent
       }
     ]
   }

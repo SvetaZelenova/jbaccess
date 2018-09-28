@@ -1,5 +1,6 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {SideNavService} from "../side-nav.service";
+import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-side-nav',
@@ -10,7 +11,8 @@ export class SideNavComponent implements OnInit {
   @HostBinding('class.toggle-nav')
   showNav = false;
 
-  constructor(private navService: SideNavService) { }
+  constructor(private navService: SideNavService,
+              private loginService: AuthService) { }
 
   ngOnInit() {
     this.open()
@@ -19,5 +21,8 @@ export class SideNavComponent implements OnInit {
     this.navService.change.subscribe(showNav => {
       this.showNav = !this.showNav
     })
+  }
+  logOut() {
+    this.loginService.logout()
   }
 }

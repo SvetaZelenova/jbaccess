@@ -5,14 +5,14 @@ import { HttpHeaders } from '@angular/common/http';
 import {zip, Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-import {environment} from '../../environments/environment'
+import {environment} from '../../../environments/environment'
 import { Key } from './key'
-import { Person } from '../personnel/person'
+import { Person } from '../person'
 import { PersonnelService as PersonnelServiceAPI,
   KeysService as KeysServiceAPI,
   KeyOutDto,
   PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
-import {HandleError, HttpErrorHandler} from '../core/http-error-handler.service';
+import {HandleError, HttpErrorHandler} from '../../core/http-error-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +39,8 @@ export class KeysService {
             res.push({
               id: k.id,
               name: k.name,
-              accessKey: k.access_key,
-              person: persons.find(p => p.id === k.person_id)
+              accessKey: k.accessKey,
+              person: persons.find(p => p.id === k.personId)
             })
           });
           return {keys: res, persons: persons};

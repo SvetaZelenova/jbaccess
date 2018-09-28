@@ -12,6 +12,8 @@ import { ReactiveFormsModule} from "@angular/forms";
 import {CoreModule} from "./core/core.module";
 import {AdminModule} from "./admin/admin.module";
 import {SharedModule} from "./shared/shared.module";
+import { AuthInterceptor} from "./auth.interceptor";
+import { HttpErrorHandler} from "./core/http-error-handler.service";
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -38,10 +40,7 @@ export function apiConfigFactory (): Configuration  {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    LoginService,
-    KeysService,
-    HttpErrorHandler,
-    MessageService
+    HttpErrorHandler
   ],
   bootstrap: [AppComponent]
 })

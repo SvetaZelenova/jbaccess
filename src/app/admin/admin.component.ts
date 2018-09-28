@@ -7,23 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private securityService: SecurityService,
-              private loginService: LoginService,
-              private router: Router) { }
+  constructor() { }
 
   ngOnInit() {
-  }
-  logOut() {
-    this.securityService.logout()
-      .subscribe(
-        res => {
-          console.log(res)
-          this.router.navigate(['login'])
-          this.loginService.setLoggedIn(false)
-        },
-        err => {
-          console.log(err)
-        }
-      )
   }
 }
