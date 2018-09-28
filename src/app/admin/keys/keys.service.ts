@@ -1,45 +1,43 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 
-import {zip, Observable, throwError} from 'rxjs';
+import {zip, Observable } from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {environment} from '../../../environments/environment'
-import { Key } from './key'
-import { Person } from '../person'
-import { PersonnelService as PersonnelServiceAPI,
-  KeysService as KeysServiceAPI,
-  KeyOutDto,
-  PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
+import { KeyViewModel } from './key.viewmodel'
 import {HandleError, HttpErrorHandler} from '../../core/http-error-handler.service';
+import {ApiResponse, Key, Person} from '../common.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KeysService {
 
-  private handleError: HandleError;
+  private readonly handleError: HandleError;
+  private readonly keysPath: string;
+  private readonly personPath: string;
   constructor(
-    private keysService: KeysServiceAPI,
-    private  personnelService: PersonnelServiceAPI,
     private http: HttpClient,
     httpErrorHandler: HttpErrorHandler) {
       this.handleError = httpErrorHandler.createHandleError('KeysService');
+      this.keysPath = environment.API_BASE_PATH + '/keys';
+      this.personPath = environment.API_BASE_PATH + '/person';
   }
 
-  loadKeys(): Observable<{keys: Key[], persons: Person[]}> {
-    return zip(this.keysService.getAllKeys(), this.personnelService.getAllPersonnel())
+  loadKeys(): Observable<{keys: KeyViewModel[], persons: Person[]}> {
+    return zip(this.http.get<ApiResponse<Key[]>>(this.keysPath), this.http.get<ApiResponse<Person[]>>(this.personPath))
       .pipe(
         map((data) => {
-          const keys = data[0].payload as KeyOutDto[];
+          const keys = data[0].payload as Key[];
           const persons = data[1].payload as Person[];
-          const res = Array<Key>();
+          const res = Array<KeyViewModel>();
           keys.forEach(k => {
             res.push({
               id: k.id,
               name: k.name,
               accessKey: k.accessKey,
+              personId: k.personId,
               person: persons.find(p => p.id === k.personId)
             })
           });
@@ -47,17 +45,16 @@ export class KeysService {
         })
       );
   }
-  createKey(key: Key): Observable<Key> {
-    return this.http.post(environment.API_BASE_PATH + '/keys',
-      {access_key: key.accessKey, name: key.name, person_id: key.person.id}
-      )
+  createKey(key: KeyViewModel): Observable<KeyViewModel> {
+    return this.http.post<ApiResponse<Key>>(this.keysPath, key)
       .pipe(
-        map((data: any) => ({
+        map((data) => ({
           id: data.payload.id,
           name: data.payload.name,
-          accessKey: data.payload.access_key,
+          accessKey: data.payload.accessKey,
+          personId: data.payload.personId,
           person: key.person})),
-        catchError(this.handleError<Key>('createKey', key))
+        catchError(this.handleError<KeyViewModel>('createKey', key))
       );
   }
 }

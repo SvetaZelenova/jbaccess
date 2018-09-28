@@ -1,15 +1,15 @@
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Key } from './key'
+import { KeyViewModel } from './key.viewmodel'
 import { KeysService } from './keys.service'
-import {Person} from "../person";
+import {Person} from '../person';
 
 @Component({
   selector: 'app-keys',
   templateUrl: './keys.component.html'
 })
 export class KeysComponent implements OnInit {
-  keys: Key[];
+  keys: KeyViewModel[];
   persons: Person[];
   displayCreateKeyDialog: boolean;
   newKeyForm: FormGroup;
@@ -32,13 +32,14 @@ export class KeysComponent implements OnInit {
     });
   }
   createKey() {
-    const key: Key = {
+    const person = this.newKeyForm.value['keyPerson'] as Person;
+    const key: KeyViewModel = {
       id: 0,
-      person: this.newKeyForm.value['keyPerson'],
+      person: person,
+      personId: person.id,
       name: this.newKeyForm.value['keyName'],
       accessKey: this.newKeyForm.value['keyAccessKey']
     };
-    console.log(key);
     this.keysService.createKey(key).subscribe(d => { this.displayCreateKeyDialog = false; this.keys.push(d) });
   }
 

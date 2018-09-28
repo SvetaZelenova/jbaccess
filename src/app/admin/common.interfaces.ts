@@ -49,7 +49,7 @@ export interface Door {
 export interface Key {
   id: number
   name: string
-  accessId: string
+  accessKey: string
   personId: number
 }
 
