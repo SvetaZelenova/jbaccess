@@ -8,12 +8,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { ReactiveFormsModule} from "@angular/forms";
-import {CoreModule} from "./core/core.module";
-import {AdminModule} from "./admin/admin.module";
-import {SharedModule} from "./shared/shared.module";
-import { AuthInterceptor} from "./auth.interceptor";
-import { HttpErrorHandler} from "./core/http-error-handler.service";
+import { ReactiveFormsModule} from '@angular/forms';
+import {CoreModule} from './core/core.module';
+import {AdminModule} from './admin/admin.module';
+import {SharedModule} from './shared/shared.module';
+import { AuthInterceptor} from './auth.interceptor';
+import { HttpErrorHandler} from './core/http-error-handler.service';
+import {CaseInterceptor} from './case.interceptor';
 
 export function apiConfigFactory (): Configuration  {
   const params: ConfigurationParameters = {
@@ -40,6 +41,7 @@ export function apiConfigFactory (): Configuration  {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CaseInterceptor, multi: true },
     HttpErrorHandler
   ],
   bootstrap: [AppComponent]
