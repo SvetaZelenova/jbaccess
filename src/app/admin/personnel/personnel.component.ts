@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonnelService, PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PersonService} from "../personnel.service";
+import {PersonService} from '../personnel.service';
 
 @Component({
   selector: 'app-personnel',
@@ -31,7 +31,6 @@ export class PersonnelComponent implements OnInit {
     this.ps.getAllPersonnel()
       .subscribe(data => {
         this.persons = <PersonOutDto[]> data.payload;
-        console.log(data);
       });
   }
   addPersonDialogOpen() {

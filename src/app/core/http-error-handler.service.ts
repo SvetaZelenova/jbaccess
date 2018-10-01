@@ -3,8 +3,23 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import {Observable, throwError} from 'rxjs';
 import {MessageService} from 'primeng/api';
+import {CaseModifier} from '../shared/case.modifier'
+import {ApiResponse, ServiceObject} from '../admin/common.interfaces';
 
+function isApiResponse(obj: any): obj is ApiResponse<any> {
+  return 'payload' in obj && 'service' in obj;
+}
 
+export interface FormError {
+  field: string
+  errors: Array<string>
+}
+export interface AppError {
+  title: string
+  message: string
+  validationErrors: any
+  formErrors: Array<FormError>
+}
 /** Type of the handleError function returned by HttpErrorHandler.createHandleError */
 export type HandleError =
   <T> (operation?: string, result?: T) => (error: HttpErrorResponse) => Observable<T>;
@@ -29,14 +44,13 @@ export class HttpErrorHandler {
 
     return (error: HttpErrorResponse): Observable<T> => {
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
+      if (isApiResponse(error.error)) {
+        const errorObj = CaseModifier.camelizeKeys(error.error.service) as ServiceObject;
+        const appError = this.processError(errorObj, serviceName, operation);
+      }
       const message = (error.error instanceof ErrorEvent) ?
         error.error.message :
         `server returned code ${error.status} with body "${JSON.stringify(error.error)}"`;
-
-      // TODO: better job of transforming error for user consumption
-      // this.messageService.add(`${serviceName}: ${operation} failed: ${message}`);
       this.messageService.add({
         severity: 'error',
         summary: `${serviceName}: ${operation} failed`,
@@ -49,6 +63,23 @@ export class HttpErrorHandler {
       // return of( result );
     };
 
+  }
+  processError(err: ServiceObject, serviceName: string, operation: string): AppError {
+    const formErrors: Array<FormError> = [];
+    for (const key in err.validationErrors) {
+      if (err.validationErrors.hasOwnProperty(key)) {
+        formErrors.push({
+          field: key,
+          errors: err.validationErrors[key]
+        })
+      }
+    }
+    return {
+      title: `${serviceName}: ${operation} failed`,
+      message: '',
+      formErrors: formErrors,
+      validationErrors: err.validationErrors
+    }
   }
 }
 

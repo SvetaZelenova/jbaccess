@@ -19,7 +19,7 @@ export class CaseModifier {
   public static decamelize(string, options) {
     return CaseModifier.separateWords(string, options).toLowerCase();
   };
-  public static camelizeKeys(object, options) {
+  public static camelizeKeys(object, options = {}) {
     return CaseModifier.processKeys(CaseModifier.processor(CaseModifier.camelize, options), object, options);
   };
   public static decamelizeKeys(object, options) {

@@ -2,13 +2,18 @@ export interface ServiceObject {
   errorCode: number
   errorMessage: string
   nodeId: string
-  validationErrors: Array<any>
+  validationErrors: any
   successful: boolean
   apiVersion: number
 }
 
 export interface ApiResponse<T> {
   payload: T
+  service: ServiceObject
+}
+
+export class ApiErrorResponse implements ApiResponse<any> {
+  payload: any
   service: ServiceObject
 }
 
