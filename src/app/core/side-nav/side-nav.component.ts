@@ -1,6 +1,6 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
-import {SideNavService} from "../side-nav.service";
-import {AuthService} from "../auth/auth.service";
+import {SideNavService} from '../side-nav.service';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -8,9 +8,9 @@ import {AuthService} from "../auth/auth.service";
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnInit {
+  @HostBinding('class') menuClass = 'hide-menu';
   @HostBinding('class.toggle-nav')
   showNav = false;
-
   constructor(private navService: SideNavService,
               private loginService: AuthService) { }
 
@@ -24,5 +24,8 @@ export class SideNavComponent implements OnInit {
   }
   logOut() {
     this.loginService.logout()
+  }
+  menuToggle() {
+    this.menuClass = this.menuClass === 'show-menu' ? 'hide-menu' : 'show-menu';
   }
 }

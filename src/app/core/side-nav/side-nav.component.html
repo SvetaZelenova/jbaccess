@@ -1,26 +1,40 @@
-<div id="sidebar_layout">
+<button id="menu" [class]="menuClass" (click)="menuToggle()">
+  <span class="open"><i class="fa fa-bars"></i> Menu</span>
+  <span class="close"><i class="fa fa-close"></i></span>
+</button>
+<div id="sidebar_layout" [class]="menuClass">
   <h1 class="logo_name">JBAccess</h1>
-  <p-button class="logout_btn" (onClick)="logOut()" label="Log out"></p-button>
+  <p-button class="logout_btn" (onClick)="logOut()" icon="fa fa-sign-out" label="Logout"></p-button>
     <ul>
       <li>
-        <i class="fa fa-users"></i>
-        <a routerLink="/person" routerLinkActive="active">Personnel</a>
+        <a routerLink="/person" routerLinkActive="active">
+          <i class="fa fa-users"></i>
+          <span>Personnel</span>
+        </a>
       </li>
       <li>
-        <i class="fa fa-building"></i>
-        <a routerLink="/places" routerLinkActive="active">Places</a>
+        <a routerLink="/places" routerLinkActive="active">
+          <i class="fa fa-building"></i>
+          <span>Places</span>
+        </a>
       </li>
       <li>
-        <i class="fa fa-key"></i>
-        <a routerLink="/keys">Keys</a>
+        <a routerLink="/keys">
+          <i class="fa fa-key"></i>
+          <span>Keys</span>
+        </a>
       </li>
       <li>
-        <i class="fa fa-search"></i>
-        <a routerLink="">Doors</a>
+        <a routerLink="">
+          <i class="fa fa-search"></i>
+          <span>Doors</span>
+        </a>
       </li>
       <li>
-        <i class="fa fa-pencil"></i>
-        <a routerLink="">Roles</a>
+        <a routerLink="">
+          <i class="fa fa-pencil"></i>
+          <span>Roles</span>
+        </a>
       </li>
     </ul>
 </div>

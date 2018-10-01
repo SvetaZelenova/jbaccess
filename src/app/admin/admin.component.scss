@@ -1,4 +1,20 @@
 $main-color: #34393a;
+
+@media all and (min-width: 900px) {
+  #wrapper {
+    padding-left:160px;
+  }
+}
+@media all and (max-width: 899px) {
+  #wrapper {
+    padding-left:0;
+  }
+}
+
+
+#main {
+  padding: 10px;
+}
 @media screen and (max-width:768px) {
   .wrapper_layout {
     .nav_wrapper app-side-nav{
@@ -6,19 +22,10 @@ $main-color: #34393a;
     }
   }
 }
-div {
-  padding: 0;
-  margin: 0;
-  color: $main-color;
-  font-size: 16px;
-}
 
-#main_layout {
-  padding: 10px 15px;
-}
-.nav_wrapper {
-  padding: 0 !important;
-}
+
+
+
 .wrapper_layout {
   .nav_wrapper app-side-nav.toggle-nav{
     display: block;
