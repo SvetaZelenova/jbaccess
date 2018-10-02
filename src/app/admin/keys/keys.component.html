@@ -1,12 +1,29 @@
-<p-button styleClass="ui-button-primary" label="Create Key" (onClick)="displayKeyForm()"></p-button>
+<div class="p-grid">
+  <div class="p-col-12">
+    <p-toolbar>
+      <p-button styleClass="ui-button-success" label="Create Key" icon="fa fa-plus" (onClick)="displayKeyForm()"></p-button>
+      <div class="ui-toolbar-group-right">
+        <p-button styleClass="ui-button-primary" label="" icon="fa fa-refresh" (onClick)="loadKeysAndPersons()"></p-button>
+      </div>
+    </p-toolbar>
+  </div>
+</div>
 
-<p-table [value]="keys">
+
+
+<p-table #dt [value]="keys" [resizableColumns]="true" [globalFilterFields]="['id','name','accessKey','person.name','person.id']">
+  <ng-template pTemplate="caption">
+    <div style="text-align: right">
+      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+      <input type="text" pInputText size="50" placeholder="Filter Keys" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    </div>
+  </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th>Id</th>
-      <th>Name [<em>Access Key</em>]</th>
-      <th>Person</th>
-      <th></th>
+      <th style="width:60px" pResizableColumn>Id</th>
+      <th pResizableColumn>Name [<em>Access Key</em>]</th>
+      <th pResizableColumn>Person</th>
+      <th style="width:120px"  pResizableColumn></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-key>
@@ -15,10 +32,11 @@
       <td>{{key.name}} [<em>{{key.accessKey}}</em>]</td>
       <td>{{key.person?.id}} : {{key.person?.name}}</td>
       <td>
-        <div class="ui-toolbar-group-left">
+
           <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayKeyForm(key)"></p-button>
+          &nbsp;
           <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteKey(key.id)"></p-button>
-        </div>
+
       </td>
     </tr>
   </ng-template>

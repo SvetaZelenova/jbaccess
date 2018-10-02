@@ -10,6 +10,7 @@ import {ListboxModule} from 'primeng/listbox';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ToolbarModule} from 'primeng/toolbar';
 
 @NgModule({
 
@@ -23,7 +24,8 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
     ToastModule,
     MessageModule,
     MessagesModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ToolbarModule
   ],
   declarations: [],
   exports: [
@@ -35,7 +37,8 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
     ToastModule,
     MessageModule,
     MessagesModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ToolbarModule
   ]
 })
 export class SharedModule { }

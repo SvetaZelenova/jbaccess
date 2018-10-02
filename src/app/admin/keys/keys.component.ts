@@ -23,7 +23,7 @@ export class KeysComponent implements OnInit {
     private  confirmationService: ConfirmationService) { }
 
   ngOnInit() {
-    this.loadKeysAndPersons();
+    this.loadKeysAndPersons(false);
 
     this.keyForm = this.formBuilder.group({
       id: [0, Validators.required],
@@ -33,10 +33,17 @@ export class KeysComponent implements OnInit {
     })
   }
 
-  loadKeysAndPersons() {
+  loadKeysAndPersons(showMessage: boolean = true) {
     this.keysService.loadKeys().subscribe(k => {
       this.keys = k.keys;
       this.persons = k.persons;
+      if (!showMessage) {
+        return;
+      }
+      this.messageService.add({
+        severity: 'info',
+        summary: `Keys table refreshed`
+      })
     });
   }
   displayKeyForm(key?: KeyViewModel) {
