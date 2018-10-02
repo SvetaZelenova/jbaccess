@@ -1,21 +1,16 @@
-<div class="p-grid">
-  <div class="p-col-12">
-    <p-toolbar>
-      <p-button styleClass="ui-button-success" label="Create Key" icon="fa fa-plus" (onClick)="displayKeyForm()"></p-button>
-      <div class="ui-toolbar-group-right">
-        <p-button styleClass="ui-button-primary" label="" icon="fa fa-refresh" (onClick)="loadKeysAndPersons()"></p-button>
-      </div>
-    </p-toolbar>
-  </div>
-</div>
+
 
 
 
 <p-table #dt [value]="keys" [resizableColumns]="true" [globalFilterFields]="['id','name','accessKey','person.name','person.id']">
   <ng-template pTemplate="caption">
-    <div style="text-align: right">
-      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-      <input type="text" pInputText size="50" placeholder="Filter Keys" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    <div class="ui-toolbar-group-left">
+      <p-button styleClass="ui-button-success" label="Create Key" icon="fa fa-plus" (onClick)="displayKeyForm()"></p-button>
+    </div>
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input type="text" pInputText size="50" placeholder="Filter Keys" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    <div class="ui-toolbar-group-right">
+      <p-button styleClass="ui-button-primary" label="" icon="fa fa-refresh" (onClick)="loadKeysAndPersons()"></p-button>
     </div>
   </ng-template>
   <ng-template pTemplate="header">
