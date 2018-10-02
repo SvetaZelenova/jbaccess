@@ -1,10 +1,11 @@
-$main-color: #34393a;
-
+$background-color: #333333;
+$text-color:#d3d3d3;
 #menu {
-  background: #e9e9e9;
+  background: $background-color;
   padding:10px;
   border: 0;
   cursor: pointer;
+  color:$text-color;
 
   &:focus {
     outline:0;
@@ -51,7 +52,7 @@ $main-color: #34393a;
 }
 
 #sidebar_layout {
-  background: #e9e9e9;
+  background: $background-color;
   position: fixed;
   top:0;
   bottom:0;
@@ -62,6 +63,7 @@ $main-color: #34393a;
   padding: 5px;
   h1 {
     font-size: 24px;
+    color:$text-color;
   }
 
   ul {
@@ -73,13 +75,13 @@ $main-color: #34393a;
       display: block;
       padding: 10px 10px 5px 0px;
       cursor: pointer;
-      border-bottom: 1px solid #b3b3b3;
-      color: $main-color;
+      border-bottom: 1px solid #616161;
+      color: $text-color;
 
       a {
         text-decoration: none;
         padding-left: 10px;
-        color: $main-color;
+        color: $text-color;
         span {
           padding-left: 5px;
         }
