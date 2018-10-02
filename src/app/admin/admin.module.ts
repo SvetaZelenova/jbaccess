@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule} from "@angular/forms";
-import {MessageService} from "primeng/api";
+import { ReactiveFormsModule} from '@angular/forms';
+import {MessageService} from 'primeng/api';
 
-import { AdminRoutingModule} from "./admin-routing.module";
+import { AdminRoutingModule} from './admin-routing.module';
 import { PersonnelComponent } from './personnel/personnel.component';
 import { PlacesComponent } from './places/places.component';
-import { AdminComponent } from "./admin.component";
+import { AdminComponent } from './admin.component';
 
-import { CoreModule } from "../core/core.module";
-import { SharedModule} from "../shared/shared.module";
+import { CoreModule } from '../core/core.module';
+import { SharedModule} from '../shared/shared.module';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
-import {KeysComponent} from "./keys/keys.component";
+import {KeysComponent} from './keys/keys.component';
+import {ConfirmationService} from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import {KeysComponent} from "./keys/keys.component";
     KeysComponent
   ],
   providers: [
-    MessageService
+    MessageService,
+    ConfirmationService
   ]
 })
 export class AdminModule { }

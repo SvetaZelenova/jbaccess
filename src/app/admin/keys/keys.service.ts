@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import {zip, Observable } from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, flatMap, map} from 'rxjs/operators';
 
 import {environment} from '../../../environments/environment'
 import { KeyViewModel } from './key.viewmodel'
@@ -21,8 +21,8 @@ export class KeysService {
     private http: HttpClient,
     httpErrorHandler: HttpErrorHandler) {
       this.handleError = httpErrorHandler.createHandleError('KeysService');
-      this.keysPath = environment.API_BASE_PATH + '/keys';
-      this.personPath = environment.API_BASE_PATH + '/person';
+      this.keysPath = environment.API_BASE_PATH + '/keys/';
+      this.personPath = environment.API_BASE_PATH + '/person/';
   }
 
   loadKeys(): Observable<{keys: KeyViewModel[], persons: Person[]}> {
@@ -55,6 +55,25 @@ export class KeysService {
           personId: data.payload.personId,
           person: key.person})),
         catchError(this.handleError<KeyViewModel>('createKey', key))
+      );
+  }
+  updateKey(key: KeyViewModel): Observable<KeyViewModel> {
+    return this.http.put<ApiResponse<Key>>(this.keysPath + key.id, key)
+      .pipe(
+        map((data) => ({
+          id: data.payload.id,
+          name: data.payload.name,
+          accessKey: data.payload.accessKey,
+          personId: data.payload.personId,
+          person: key.person})),
+        catchError(this.handleError<KeyViewModel>('updateKey', key))
+      );
+  }
+  deleteKey(id: number): Observable<number> {
+    return this.http.delete<ApiResponse<any>>(this.keysPath + id)
+      .pipe(
+        map( (data) => data.service.successful ? id : 0),
+        catchError(this.handleError<number>('deleteKey', id))
       );
   }
 }
