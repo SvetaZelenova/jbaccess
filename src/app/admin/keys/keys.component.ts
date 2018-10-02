@@ -16,6 +16,7 @@ export class KeysComponent implements OnInit {
   displayCreateKeyDialog: boolean;
   keyForm: FormGroup;
   submitted = false;
+  isRefreshing = false;
   constructor(
     private keysService: KeysService,
     private formBuilder: FormBuilder,
@@ -34,9 +35,11 @@ export class KeysComponent implements OnInit {
   }
 
   loadKeysAndPersons(showMessage: boolean = true) {
+    this.isRefreshing = true;
     this.keysService.loadKeys().subscribe(k => {
       this.keys = k.keys;
       this.persons = k.persons;
+      this.isRefreshing = false;
       if (!showMessage) {
         return;
       }
