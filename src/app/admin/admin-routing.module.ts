@@ -11,22 +11,29 @@ import {KeysComponent} from "./keys/keys.component";
 const routes: Routes = [
   {
     path: '', component: AdminComponent,
+    canActivate: [AuthGuard],
     children: [
       {
-        path: 'person',
-        component: PersonnelComponent
-      },
-      {
-        path: 'person/:id',
-        component: PersonDetailComponent
-      },
-      {
-        path: 'places',
-        component: PlacesComponent
-      },
-      {
-        path: 'keys',
-        component: KeysComponent
+        path: '',
+        canActivateChild: [AuthGuard],
+        children: [
+          {
+            path: 'person',
+            component: PersonnelComponent
+          },
+          {
+            path: 'person/:id',
+            component: PersonDetailComponent
+          },
+          {
+            path: 'places',
+            component: PlacesComponent
+          },
+          {
+            path: 'keys',
+            component: KeysComponent
+          }
+        ]
       }
     ]
   }
