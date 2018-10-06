@@ -1,10 +1,9 @@
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import {MessageService} from 'primeng/api';
 import { KeyViewModel } from './key.viewmodel'
 import { KeysService } from './keys.service'
 import {Person} from '../person';
-import {ConfirmationService} from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-keys',

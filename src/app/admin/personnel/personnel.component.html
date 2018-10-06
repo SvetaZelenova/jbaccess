@@ -1,6 +1,14 @@
-<p-button styleClass="ui-button-primary" label="Add" (onClick)="addPersonDialogOpen($event)"></p-button>
-
-<p-table [value]="persons">
+<p-table #personsTable [value]="persons" [paginator]="true" [rows]="10" [globalFilterFields]="['name']">
+  <ng-template pTemplate="caption">
+    <div class="ui-toolbar-group-left">
+      <p-button styleClass="ui-button-primary" label="Add" icon="fa fa-plus" (onClick)="displayPersonDialog()"></p-button>
+    </div>
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input class="ui-inputtext ui-corner-all ui-state-default ui-widget" type="text" pInputText size="50" placeholder="Filter personnel" (input)="personsTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    <div class="ui-toolbar-group-right">
+      <p-button styleClass="ui-button-primary" label="{{isRefreshing ? 'Wait' : ''}}" [disabled]="isRefreshing" icon="fa fa-refresh" (onClick)="loadPersonnel()"></p-button>
+    </div>
+  </ng-template>
   <ng-template pTemplate="header">
     <tr>
       <th>Id</th>
@@ -14,15 +22,17 @@
       <td>{{person.name}}</td>
       <td>
         <button pButton type="button" label="Open" routerLink="/person/{{person.id}}" class="ui-button-raised ui-button-secondary"></button>
+        <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayPersonDialog(person)"></p-button>
         <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deletePerson(person.id)"></p-button>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
-<p-dialog header="Add new User" [modal]="true" [(visible)]="displayAddPersonDialog">
+<p-dialog header="Add User" [modal]="true" [(visible)]="displayAddPersonDialog">
   <p-header></p-header>
-  <form [formGroup]="newUserForm" (submit)="onSubmit()">
+  <form [formGroup]="newUserForm" (submit)="submitPerson()">
+    <input type="hidden" formControlName="id">
     <div class="ui-inputgroup">
       <span class="ui-inputgroup-addon">Name</span>
       <input
@@ -30,10 +40,13 @@
         class="ui-inputtext ui-corner-all ui-state-default ui-widget"
         pInputText
         placeholder="User Name"
-        formControlName="userName"
+        formControlName="name"
         required>
     </div>
+    <div class="p-col-12" *ngIf="!newUserForm.controls['name'].valid&&(newUserForm.controls['name'].dirty||submitted)">
+      <p-message severity="error" text="Person Name is required"></p-message>
+    </div>
     <br>
-    <p-button styleClass="ui-button-info" label="Create" type="submit"></p-button>
+    <p-button [disabled]="!newUserForm.valid" styleClass="ui-button-info" label="Save" type="submit"></p-button>
   </form>
 </p-dialog>

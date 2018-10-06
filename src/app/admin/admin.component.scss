@@ -10,24 +10,6 @@ $main-color: #34393a;
     padding-left:0;
   }
 }
-
-
 #main {
   padding: 10px;
-}
-@media screen and (max-width:768px) {
-  .wrapper_layout {
-    .nav_wrapper app-side-nav{
-      display: none;
-    }
-  }
-}
-
-
-
-
-.wrapper_layout {
-  .nav_wrapper app-side-nav.toggle-nav{
-    display: block;
-  }
 }

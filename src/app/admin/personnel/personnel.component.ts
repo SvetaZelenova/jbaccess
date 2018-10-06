@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonnelService, PersonOutDto } from '@anatolyua/jbaccess-client-open-api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PersonService} from '../personnel.service';
+import {PersonService} from './personnel.service';
+import {Person} from "../common.interfaces";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-personnel',
@@ -10,52 +11,103 @@ import {PersonService} from '../personnel.service';
 })
 export class PersonnelComponent implements OnInit {
 
-  persons: PersonOutDto[];
+  persons: Person[];
   newUserForm: FormGroup;
-
+  submitted = false;
+  isRefreshing = false;
   displayAddPersonDialog = false;
 
-  constructor( private ps: PersonService, private fb: FormBuilder) {
-
-  }
+  constructor( private personService: PersonService,
+               private formBuilder: FormBuilder,
+               private messageService: MessageService,
+               private  confirmationService: ConfirmationService) {}
 
   ngOnInit() {
-    this.loadPersonnel()
+    this.loadPersonnel(false)
 
-    this.newUserForm = this.fb.group({
-      userName: ['', Validators.required]
+    this.newUserForm = this.formBuilder.group({
+      id: [0, Validators.required],
+      name: ['', Validators.required]
     });
   }
 
-  loadPersonnel() {
-    this.ps.getAllPersonnel()
+  loadPersonnel(showMessage: boolean = true) {
+    this.isRefreshing = true;
+    this.personService.getAllPersonnel()
       .subscribe(data => {
-        this.persons = <PersonOutDto[]> data.payload;
+        this.persons = data.persons;
+        this.isRefreshing = false;
+        if (!showMessage) {
+          return;
+        }
+        this.messageService.add({
+          severity: 'info',
+          summary: `Persons table refreshed`
+        })
       });
   }
-  addPersonDialogOpen() {
+  displayPersonDialog(person?: Person) {
+    this.submitted = false;
+    const personForm = person ? person : {id: 0, name: ''};
+    this.newUserForm.reset(personForm);
     this.displayAddPersonDialog = true;
   };
-  addPersonDialogClose() {
+  hidePersonDialog() {
     this.displayAddPersonDialog = false;
   }
-  deletePerson(id: number) {
-    this.ps.deletePerson(id).subscribe(
-      () => this.loadPersonnel(),
-      error => console.log(error)
-    )
+  submitPerson () {
+    this.submitted = true;
+    const person = this.newUserForm.value as Person;
+    if (!this.newUserForm.valid) {
+      return;
+    }
+    if (person.id === 0) {
+      this.createPerson(person);
+    } else {
+      this.updatePerson(person);
+    }
   }
-
-  onSubmit() {
-    const name = this.newUserForm.value['userName'];
-    this.ps.createPerson({name} as PersonOutDto)
+  createPerson(person: Person) {
+    this.personService.createPerson(person)
       .subscribe(
         () => {
-          this.loadPersonnel()
-          this.addPersonDialogClose()
+          this.loadPersonnel();
+          this.hidePersonDialog();
+          this.messageService.add({
+            severity: 'info',
+            summary: `New person '${person.name}' successfully created`
+          })
         },
 
         error => console.log('Error!', error)
       )
+  }
+  updatePerson(person: Person) {
+    this.personService.updatePerson(person)
+      .subscribe(person => {
+        this.loadPersonnel();
+        this.hidePersonDialog();
+        this.messageService.add({
+          severity: 'info',
+          summary: `Person '${person.name}' successfully updated`
+        })
+      })
+  }
+  deletePerson(id: number) {
+    const person = this.persons.find(p => p.id === id);
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${person.id}: ${person.name}?`,
+      accept: () => {
+        this.personService.deletePerson(id)
+          .subscribe( d => {
+            this.loadPersonnel();
+            this.messageService.add({
+              severity: 'info',
+              summary: `Person with id='${d}' successfully removed`
+            })
+          },
+            error => console.log(error)
+          )}
+    });
   }
 }

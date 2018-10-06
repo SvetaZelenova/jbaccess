@@ -9,18 +9,11 @@ import {AuthService} from '../auth/auth.service';
 })
 export class SideNavComponent implements OnInit {
   @HostBinding('class') menuClass = 'hide-menu';
-  @HostBinding('class.toggle-nav')
-  showNav = false;
+
   constructor(private navService: SideNavService,
               private loginService: AuthService) { }
 
   ngOnInit() {
-    this.open()
-  }
-  open() {
-    this.navService.change.subscribe(showNav => {
-      this.showNav = !this.showNav
-    })
   }
   logOut() {
     this.loginService.logout()
