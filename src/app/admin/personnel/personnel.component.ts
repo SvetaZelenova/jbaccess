@@ -70,8 +70,8 @@ export class PersonnelComponent implements OnInit {
   createPerson(person: Person) {
     this.personService.createPerson(person)
       .subscribe(
-        () => {
-          this.loadPersonnel();
+        person => {
+          this.loadPersonnel(false);
           this.hidePersonDialog();
           this.messageService.add({
             severity: 'info',
@@ -85,7 +85,7 @@ export class PersonnelComponent implements OnInit {
   updatePerson(person: Person) {
     this.personService.updatePerson(person)
       .subscribe(person => {
-        this.loadPersonnel();
+        this.loadPersonnel(false);
         this.hidePersonDialog();
         this.messageService.add({
           severity: 'info',
@@ -100,10 +100,10 @@ export class PersonnelComponent implements OnInit {
       accept: () => {
         this.personService.deletePerson(id)
           .subscribe( d => {
-            this.loadPersonnel();
+            this.loadPersonnel(false);
             this.messageService.add({
               severity: 'info',
-              summary: `Person with id='${d}' successfully removed`
+              summary: `Person '${person.name}' successfully removed`
             })
           },
             error => console.log(error)
