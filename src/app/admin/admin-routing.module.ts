@@ -7,6 +7,9 @@ import {AdminComponent} from "./admin.component";
 import {PersonDetailComponent} from "./person-detail/person-detail.component";
 import {AuthGuard} from "../core/auth/auth.guard";
 import {KeysComponent} from "./keys/keys.component";
+import {DoorsComponent} from "./doors/doors.component";
+import {RolesComponent} from "./roles/roles.component";
+import {ControllersComponent} from "./controllers/controllers.component";
 
 const routes: Routes = [
   {
@@ -32,12 +35,24 @@ const routes: Routes = [
           {
             path: 'keys',
             component: KeysComponent
+          },
+          {
+            path: 'doors',
+            component: DoorsComponent
+          },
+          {
+            path: 'roles',
+            component: RolesComponent
+          },
+          {
+            path: 'controllers',
+            component: ControllersComponent
           }
         ]
       }
     ]
   }
-]
+];
 
 @NgModule({
   imports: [

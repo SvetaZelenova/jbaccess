@@ -1,0 +1,73 @@
+<p-table #doorsTable [value]="doors" [paginator]="true" [rows]="10" [globalFilterFields]="['name']">
+  <ng-template pTemplate="caption">
+    <div class="ui-toolbar-group-left">
+      <p-button styleClass="ui-button-primary" label="Add" icon="fa fa-plus" (onClick)="displayDoorForm()"></p-button>
+    </div>
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input class="ui-inputtext ui-corner-all ui-state-default ui-widget" type="text" pInputText size="50" placeholder="Filter doors" (input)="doorsTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    <div class="ui-toolbar-group-right">
+      <p-button styleClass="ui-button-primary" label="{{isRefreshing ? 'Wait' : ''}}" [disabled]="isRefreshing" icon="fa fa-refresh" (onClick)="loadDoors()"></p-button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>&nbsp;</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-door>
+    <tr>
+      <td>{{door.id}}</td>
+      <td>{{door.name}} [<em>{{door.accessId}}</em>]</td>
+      <td>
+        <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayDoorForm(door)"></p-button>
+        &nbsp;
+        <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteDoor(door.id)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog header="Add Door" [modal]="true" [(visible)]="displayDoorDialog">
+  <p-header></p-header>
+  <form [formGroup]="doorForm" (submit)="submitDoor()" class="ui-g ui-fluid">
+    <input type="hidden" formControlName="id">
+    <div class="p-col-12">
+      <div class="p-grid">
+        <label class="p-col-3">Door Name</label>
+        <div class="p-col-9">
+          <input
+            type="text"
+            class="ui-inputtext ui-corner-all ui-state-default ui-widget"
+            pInputText
+            placeholder="Door Name"
+            formControlName="name"
+            required>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12" *ngIf="!doorForm.controls['name'].valid&&(doorForm.controls['name'].dirty||submitted)">
+      <p-message severity="error" text="Person Name is required"></p-message>
+    </div>
+    <div class="p-col-12">
+      <div class="p-grid">
+        <label class="p-col-3">Access ID</label>
+        <div class="p-col-9">
+          <input
+            type="text"
+            class="ui-inputtext ui-corner-all ui-state-default ui-widget"
+            pInputText
+            placeholder="Access Id"
+            formControlName="accessId"
+            required>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12" *ngIf="!doorForm.controls['accessId'].valid&&(doorForm.controls['accessId'].dirty||submitted)">
+      <p-message severity="error" text="Access Id is required"></p-message>
+    </div>
+    <br>
+    <p-button [disabled]="!doorForm.valid" styleClass="ui-button-info" label="Save" type="submit"></p-button>
+  </form>
+</p-dialog>

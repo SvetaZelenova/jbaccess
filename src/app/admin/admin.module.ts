@@ -13,6 +13,9 @@ import { SharedModule} from '../shared/shared.module';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
 import {KeysComponent} from './keys/keys.component';
 import {ConfirmationService} from 'primeng/api';
+import { DoorsComponent } from './doors/doors.component';
+import { RolesComponent } from './roles/roles.component';
+import { ControllersComponent } from './controllers/controllers.component';
 
 @NgModule({
   imports: [
@@ -27,7 +30,10 @@ import {ConfirmationService} from 'primeng/api';
     PersonnelComponent,
     PlacesComponent,
     PersonDetailComponent,
-    KeysComponent
+    KeysComponent,
+    DoorsComponent,
+    RolesComponent,
+    ControllersComponent
   ],
   providers: [
     MessageService,
