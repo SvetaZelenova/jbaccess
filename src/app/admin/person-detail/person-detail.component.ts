@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from "@angular/router";
-import {PersonInDto, PersonnelService, PersonOutDto} from "@anatolyua/jbaccess-client-open-api";
 import { Location} from "@angular/common";
-import {User} from "../user.model";
+import {Person} from "../common.interfaces";
+import {PersonService} from "../personnel/personnel.service";
 
 @Component({
   selector: 'app-person-detail',
@@ -10,22 +10,21 @@ import {User} from "../user.model";
   styleUrls: ['./person-detail.component.scss']
 })
 export class PersonDetailComponent implements OnInit {
-  public user = {} as User;
-  constructor(private ps: PersonnelService,
+  public person = {} as Person;
+  constructor(private ps: PersonService,
               private route: ActivatedRoute,
               private location: Location) { }
 
 
 
   ngOnInit() {
-    this.getUser()
+    this.getPerson()
   }
-  getUser() {
+  getPerson() {
     const personId = +this.route.snapshot.paramMap.get('id');
     this.ps.getPerson(personId)
       .subscribe(data => {
-        this.user = <PersonOutDto>data.payload;
-        console.log(this.user)
+        this.person = data;
       })
   }
   backToTable() {

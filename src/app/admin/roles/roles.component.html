@@ -4,7 +4,7 @@
       <p-button styleClass="ui-button-primary" label="Add" icon="fa fa-plus" (onClick)="displayRoleForm()"></p-button>
     </div>
     <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-    <input class="ui-inputtext ui-corner-all ui-state-default ui-widget" type="text" pInputText size="50" placeholder="Filter doors" (input)="rolesTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    <input class="ui-inputtext ui-corner-all ui-state-default ui-widget" type="text" pInputText size="50" placeholder="Filter roles" (input)="rolesTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
     <div class="ui-toolbar-group-right">
       <p-button styleClass="ui-button-primary" label="{{isRefreshing ? 'Wait' : ''}}" [disabled]="isRefreshing" icon="fa fa-refresh" (onClick)="loadRoles()"></p-button>
     </div>

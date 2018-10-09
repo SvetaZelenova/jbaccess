@@ -55,4 +55,13 @@ export class PersonService {
         catchError(this.handleError<number>('deletePerson', id))
       );
   }
+  getPerson(id: number): Observable<Person> {
+    return this.http.get<ApiResponse<Person>>(this.personPath + id)
+      .pipe(
+        map(data => ({
+          id: data.payload.id,
+          name: data.payload.name})),
+        catchError(this.handleError<Person>('getPerson', {id, name}))
+      );
+  }
 }
