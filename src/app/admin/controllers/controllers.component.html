@@ -1,3 +1,73 @@
-<p>
-  controllers works!
-</p>
+<p-table #controllersTable [value]="controllers" [paginator]="true" [rows]="10" [globalFilterFields]="['name']">
+  <ng-template pTemplate="caption">
+    <div class="ui-toolbar-group-left">
+      <p-button styleClass="ui-button-primary" label="Add" icon="fa fa-plus" (onClick)="displayControllerForm()"></p-button>
+    </div>
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input class="ui-inputtext ui-corner-all ui-state-default ui-widget" type="text" pInputText size="50" placeholder="Filter controllers" (input)="controllersTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    <div class="ui-toolbar-group-right">
+      <p-button styleClass="ui-button-primary" label="{{isRefreshing ? 'Wait' : ''}}" [disabled]="isRefreshing" icon="fa fa-refresh" (onClick)="loadControllers()"></p-button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Controller</th>
+      <th>&nbsp;</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-controller>
+    <tr>
+      <td>{{controller.id}}</td>
+      <td>{{controller.name}} [<em>{{controller.controllerId}}</em>]</td>
+      <td>
+        <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayControllerForm(controller)"></p-button>
+        &nbsp;
+        <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteController(controller.id)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog header="Add Controller" [modal]="true" [(visible)]="displayControllerDialog">
+  <p-header></p-header>
+  <form [formGroup]="controllerForm" (submit)="submitController()" class="ui-g ui-fluid">
+    <input type="hidden" formControlName="id">
+    <div class="p-col-12">
+      <div class="p-grid">
+        <label class="p-col-3">Controller Name</label>
+        <div class="p-col-9">
+          <input
+            type="text"
+            class="ui-inputtext ui-corner-all ui-state-default ui-widget"
+            pInputText
+            placeholder="Controller Name"
+            formControlName="name"
+            required>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12" *ngIf="!controllerForm.controls['name'].valid&&(controllerForm.controls['name'].dirty||submitted)">
+      <p-message severity="error" text="Person Name is required"></p-message>
+    </div>
+    <div class="p-col-12">
+      <div class="p-grid">
+        <label class="p-col-3">Controller Id</label>
+        <div class="p-col-9">
+          <input
+            type="text"
+            class="ui-inputtext ui-corner-all ui-state-default ui-widget"
+            pInputText
+            placeholder="Controller Id"
+            formControlName="controllerId"
+            required>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12" *ngIf="!controllerForm.controls['controllerId'].valid&&(controllerForm.controls['controllerId'].dirty||submitted)">
+      <p-message severity="error" text="Controller Id is required"></p-message>
+    </div>
+    <br>
+    <p-button [disabled]="!controllerForm.valid" styleClass="ui-button-info" label="Save" type="submit"></p-button>
+  </form>
+</p-dialog>

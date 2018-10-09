@@ -2,7 +2,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { KeyViewModel } from './key.viewmodel'
 import { KeysService } from './keys.service'
-import {Person} from '../person';
+import {Person} from "../common.interfaces";
 import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
