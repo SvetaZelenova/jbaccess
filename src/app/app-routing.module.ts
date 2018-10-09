@@ -7,7 +7,8 @@ import {AuthComponent} from "./core/auth/auth.component";
 const routes: Routes = [
   {
     path: '',
-    component: AdminComponent,
+    redirectTo: 'person',
+    pathMatch: 'full',
     canActivate: [AuthGuard],
   },
   {
