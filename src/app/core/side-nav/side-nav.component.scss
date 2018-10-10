@@ -42,7 +42,9 @@ $text-color:#d3d3d3;
 }
 
 
-
+#sidebar_layout {
+  color:$text-color;
+}
 #sidebar_layout, #menu {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;

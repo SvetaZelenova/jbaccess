@@ -4,6 +4,9 @@
 </button>
 <div id="sidebar_layout" [class]="menuClass">
   <h1 class="logo_name">JBAccess</h1>
+  <p>
+    Logged in as: <strong>{{currentUser.username}}</strong>
+  </p>
   <p-button class="logout_btn" (onClick)="logOut()" icon="fa fa-sign-out" label="Logout"></p-button>
     <ul>
       <li routerLinkActive="active">

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "./auth.service";
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit {
 
   ngOnInit() {
 
-    if(this.loginService.isLoggedIn) {
+    if (this.loginService.isLoggedIn) {
       this.router.navigate(['person'])
     }
     this.logInForm = this.fb.group({
@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit {
     });
   }
   onSubmit() {
-    this.loginService.submit(this.logInForm.value)
+    this.loginService.login(this.logInForm.value)
   }
 
 }

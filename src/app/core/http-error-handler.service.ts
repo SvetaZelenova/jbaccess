@@ -19,6 +19,7 @@ export interface AppError {
   message: string
   validationErrors: any
   formErrors: Array<FormError>
+  serviceObject: ServiceObject
 }
 /** Type of the handleError function returned by HttpErrorHandler.createHandleError */
 export type HandleError =
@@ -47,6 +48,7 @@ export class HttpErrorHandler {
       if (isApiResponse(error.error)) {
         const errorObj = CaseModifier.camelizeKeys(error.error.service) as ServiceObject;
         const appError = this.processError(errorObj, serviceName, operation);
+        return throwError(appError);
       }
       const message = (error.error instanceof ErrorEvent) ?
         error.error.message :
@@ -59,7 +61,7 @@ export class HttpErrorHandler {
       });
 
       // Let the app keep running by returning a safe result.
-      return throwError('error');
+      return throwError(error.error ? error.error : error);
       // return of( result );
     };
 
@@ -78,7 +80,8 @@ export class HttpErrorHandler {
       title: `${serviceName}: ${operation} failed`,
       message: '',
       formErrors: formErrors,
-      validationErrors: err.validationErrors
+      validationErrors: err.validationErrors,
+      serviceObject: err
     }
   }
 }

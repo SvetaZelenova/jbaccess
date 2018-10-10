@@ -1,55 +1,91 @@
 import { Injectable } from '@angular/core';
-import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
-import {SecurityService} from "@anatolyua/jbaccess-client-open-api";
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {ApiResponse, Login, User} from '../../admin/common.interfaces';
+import { Observable, BehaviorSubject } from 'rxjs';
+import {HandleError, HttpErrorHandler} from '../http-error-handler.service';
+import {environment} from '../../../environments/environment';
+import {catchError, map, tap} from 'rxjs/operators';
+import { CacheService } from './cache.service';
+
+export interface IAuthStatus {
+  isAuthenticated: boolean
+  user: User
+}
+export const defaultAuthStatus = {
+  isAuthenticated: false,
+  user: null
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  private loggedInStatus: boolean = false;
+export class AuthService extends CacheService {
+  public authStatus = new BehaviorSubject<IAuthStatus>(
+    this.getItem('authStatus') || defaultAuthStatus
+  );
+
+  private readonly handleError: HandleError;
+  private readonly authPath: string;
 
   constructor(private http: HttpClient,
-              private securityService: SecurityService,
-              private router: Router) { }
-
-  setLoggedIn(value: boolean) {
-    this.loggedInStatus = value;
-    if(localStorage) {
-      localStorage.setItem('loggedInStatus', JSON.stringify(this.loggedInStatus));
-    }
+              private httpErrorHandler: HttpErrorHandler,
+              private router: Router) {
+    super();
+    this.handleError = httpErrorHandler.createHandleError('AuthService');
+    this.authPath = environment.API_BASE_PATH + '/security/';
   }
-  get isLoggedIn() {
-    if(localStorage) {
-      this.loggedInStatus = JSON.parse(localStorage.getItem('loggedInStatus'));
-    }
-    return this.loggedInStatus
-  }
-  submit(data) {
-    this.securityService.login(data)
-      .subscribe(
-        res => {
-          console.log(res)
-          this.router.navigate(['person'])
-          this.setLoggedIn(true)
-        },
-        err => {
-          console.log(err)
-        }
+  login(credentials: Login) {
+    this.http.post<ApiResponse<User>>(this.authPath + 'login', credentials)
+      .pipe(
+        map(res => res.payload),
+        catchError(this.handleError<User>('login', null))
       )
-
+      .subscribe(user => {
+        this.updateAuthStatus(user);
+      }, error => {
+        if (error.hasOwnProperty('serviceObject') && error.serviceObject.errorMessage === 'Unauthorized') {
+          this.authStatus.next(defaultAuthStatus);
+          this.router.navigate(['login']);
+        }
+      });
+  }
+  restoreSession() {
+    this.http.get<ApiResponse<User>>(this.authPath + 'restore-session')
+      .pipe(
+        map(res => res.payload),
+        catchError(this.handleError<User>('restoreSession', null))
+      )
+      .subscribe( user => {
+        this.updateAuthStatus(user);
+      },
+        error => {
+        if (error.hasOwnProperty('serviceObject') && error.serviceObject.errorMessage === 'Unauthorized') {
+          this.authStatus.next(defaultAuthStatus);
+          this.router.navigate(['login']);
+        }
+        });
   }
   logout() {
-    this.securityService.logout()
-      .subscribe(
-        res => {
-          console.log(res)
-          this.router.navigate(['login'])
-          this.setLoggedIn(false)
-        },
-        err => {
-          console.log(err)
-        }
+    this.http.get<ApiResponse<any>>(this.authPath + 'logout')
+      .pipe(
+        catchError(this.handleError<any>('logout', null))
       )
+      .subscribe(
+        () => {
+          this.authStatus.next(defaultAuthStatus);
+        },
+        null,
+        () => { this.router.navigate(['login']); });
+  }
+  private updateAuthStatus(user: User) {
+    if (!user) { return; }
+    const newStatus = {
+      isAuthenticated: true,
+      user: user
+    };
+    this.authStatus.next(newStatus);
+    this.setItem('authStatus', newStatus);
+    this.router.navigate(['/']);
   }
 }
