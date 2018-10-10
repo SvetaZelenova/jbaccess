@@ -6,7 +6,7 @@ import {catchError, map} from 'rxjs/operators';
 
 import {environment} from '../../../environments/environment';
 import {HandleError, HttpErrorHandler} from '../../core/http-error-handler.service';
-import {ApiResponse, Person} from '../common.interfaces';
+import {ApiResponse, Key, Person, Role} from '../common.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -63,5 +63,23 @@ export class PersonService {
           name: data.payload.name})),
         catchError(this.handleError<Person>('getPerson', {id, name}))
       );
+  }
+  getKeys(id: number): Observable<{keys: Key[]}> {
+    return this.http.get<ApiResponse<Key[]>>(this.personPath + id + '/keys')
+      .pipe(
+        map((data) => {
+          const keys = data.payload as Key[];
+          return {keys: keys}
+        })
+      )
+  }
+  getRoles(id: number): Observable<{roles: Role[]}> {
+    return this.http.get<ApiResponse<Role[]>>(this.personPath + id + '/roles')
+      .pipe(
+        map((data) => {
+          const roles = data.payload as Role[];
+          return {roles: roles}
+        })
+      )
   }
 }
