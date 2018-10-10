@@ -11,6 +11,7 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ToolbarModule} from 'primeng/toolbar';
+import {TabViewModule} from 'primeng/tabview';
 
 @NgModule({
 
@@ -25,7 +26,8 @@ import {ToolbarModule} from 'primeng/toolbar';
     MessageModule,
     MessagesModule,
     ConfirmDialogModule,
-    ToolbarModule
+    ToolbarModule,
+    TabViewModule
   ],
   declarations: [],
   exports: [
@@ -38,7 +40,8 @@ import {ToolbarModule} from 'primeng/toolbar';
     MessageModule,
     MessagesModule,
     ConfirmDialogModule,
-    ToolbarModule
+    ToolbarModule,
+    TabViewModule
   ]
 })
 export class SharedModule { }

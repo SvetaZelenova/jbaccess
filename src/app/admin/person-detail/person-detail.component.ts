@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from "@angular/router";
 import { Location} from "@angular/common";
-import {Person} from "../common.interfaces";
+import {Key, Person, Role} from "../common.interfaces";
 import {PersonService} from "../personnel/personnel.service";
 
 @Component({
@@ -10,21 +10,38 @@ import {PersonService} from "../personnel/personnel.service";
   styleUrls: ['./person-detail.component.scss']
 })
 export class PersonDetailComponent implements OnInit {
+
   public person = {} as Person;
-  constructor(private ps: PersonService,
+  keys: Key[];
+  roles: Role[];
+  personId = +this.route.snapshot.paramMap.get('id');
+
+  constructor(private personService: PersonService,
               private route: ActivatedRoute,
               private location: Location) { }
 
-
-
   ngOnInit() {
-    this.getPerson()
+    this.getPerson();
+    this.getKeysList();
+    this.getRolesList();
+
   }
   getPerson() {
-    const personId = +this.route.snapshot.paramMap.get('id');
-    this.ps.getPerson(personId)
+    this.personService.getPerson(this.personId)
       .subscribe(data => {
         this.person = data;
+      })
+  }
+  getKeysList() {
+    this.personService.getKeys(this.personId)
+      .subscribe(data => {
+        this.keys = data.keys
+      })
+  }
+  getRolesList() {
+    this.personService.getRoles(this.personId)
+      .subscribe(data => {
+        this.roles = data.roles
       })
   }
   backToTable() {
