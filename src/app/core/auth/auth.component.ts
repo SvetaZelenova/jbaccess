@@ -16,10 +16,6 @@ export class AuthComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-
-    if (this.loginService.isLoggedIn) {
-      this.router.navigate(['person'])
-    }
     this.logInForm = this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required]

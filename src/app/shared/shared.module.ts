@@ -12,6 +12,7 @@ import {MessageModule} from 'primeng/message';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ToolbarModule} from 'primeng/toolbar';
 import {TabViewModule} from 'primeng/tabview';
+import {InputSwitchModule} from 'primeng/inputswitch';
 
 @NgModule({
 
@@ -27,7 +28,8 @@ import {TabViewModule} from 'primeng/tabview';
     MessagesModule,
     ConfirmDialogModule,
     ToolbarModule,
-    TabViewModule
+    TabViewModule,
+    InputSwitchModule
   ],
   declarations: [],
   exports: [
@@ -41,7 +43,8 @@ import {TabViewModule} from 'primeng/tabview';
     MessagesModule,
     ConfirmDialogModule,
     ToolbarModule,
-    TabViewModule
+    TabViewModule,
+    InputSwitchModule
   ]
 })
 export class SharedModule { }

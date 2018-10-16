@@ -33,13 +33,13 @@ export class PersonDetailComponent implements OnInit {
       })
   }
   getKeysList() {
-    this.personService.getKeys(this.personId)
+    this.personService.getPersonKeys(this.personId)
       .subscribe(data => {
         this.keys = data.keys
       })
   }
   getRolesList() {
-    this.personService.getRoles(this.personId)
+    this.personService.getPersonRoles(this.personId)
       .subscribe(data => {
         this.roles = data.roles
       })
