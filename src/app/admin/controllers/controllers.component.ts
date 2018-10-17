@@ -19,6 +19,8 @@ export class ControllersComponent implements OnInit {
   isRefreshing = false;
   displayControllerDialog = false;
   displayDoorsRelations = false;
+  currentController: Controller;
+  doorsFormTitle: string;
 
   constructor(private controllersService: ControllersService,
               private formBuilder: FormBuilder,
@@ -35,9 +37,11 @@ export class ControllersComponent implements OnInit {
     });
   }
 
-  editDoors(id: number) {
+  editDoors(controller: Controller) {
+    this.currentController = controller;
+    this.doorsFormTitle = `Doors for ${controller.name}`;
     this.doors = [];
-    this.controllersService.getDoorsRelationsByControllerId(id)
+    this.controllersService.getDoorsRelationsByControllerId(controller.id)
       .subscribe( rel => {
         this.doors = rel;
       });
@@ -49,10 +53,11 @@ export class ControllersComponent implements OnInit {
         () => this.messageService.add({
           severity: 'info',
           summary: `Door ${newRelation.connected ? 'added' : 'removed'}`,
+          detail: `Door ${newRelation.relatedEntityDisplayName}
+            ${newRelation.connected ? 'added' : 'removed'}
+            to ${this.currentController.name}`
         }),
         () => { this.displayDoorsRelations = false; });
-    console.log(newRelation);
-    console.log(this.doors);
   }
   loadControllers(showMessage: boolean = true) {
     this.isRefreshing = true;
