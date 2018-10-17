@@ -5,9 +5,7 @@ import {NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiModule, Configuration, ConfigurationParameters } from '@anatolyua/jbaccess-client-open-api';
 import { HttpClientModule } from '@angular/common/http';
-import { environment } from '../environments/environment';
 import { ReactiveFormsModule} from '@angular/forms';
 import {CoreModule} from './core/core.module';
 import {AdminModule} from './admin/admin.module';
@@ -16,13 +14,7 @@ import { AuthInterceptor} from './auth.interceptor';
 import { HttpErrorHandler} from './core/http-error-handler.service';
 import {CaseInterceptor} from './case.interceptor';
 
-export function apiConfigFactory (): Configuration  {
-  const params: ConfigurationParameters = {
-    basePath: environment.API_BASE_PATH,
-    withCredentials: true
-  }
-  return new Configuration(params);
-}
+
 
 @NgModule({
   declarations: [
@@ -33,7 +25,6 @@ export function apiConfigFactory (): Configuration  {
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    ApiModule.forRoot(apiConfigFactory),
     ReactiveFormsModule,
     CoreModule,
     AdminModule,

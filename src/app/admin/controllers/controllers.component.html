@@ -22,8 +22,8 @@
       <td>{{controller.name}} [<em>{{controller.controllerId}}</em>]</td>
       <td>
         <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayControllerForm(controller)"></p-button>
-        &nbsp;
-        <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteController(controller.id)"></p-button>
+        &nbsp;<p-button styleClass="ui-button-secondary" label="Doors"  (onClick)="editDoors(controller.id)"></p-button>
+        &nbsp;<p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteController(controller.id)"></p-button>
       </td>
     </tr>
   </ng-template>
@@ -70,4 +70,8 @@
     <br>
     <p-button [disabled]="!controllerForm.valid" styleClass="ui-button-info" label="Save" type="submit"></p-button>
   </form>
+</p-dialog>
+
+<p-dialog header="Doors" [modal]="true" [(visible)]="displayDoorsRelations">
+  <app-relations *ngFor="let rel of doors" [relation]="rel" (updateRelation)="updateDoorRelation($event)"></app-relations>
 </p-dialog>

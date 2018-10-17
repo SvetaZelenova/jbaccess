@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import {catchError, map} from "rxjs/operators";
-import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/index";
-import {ApiResponse, Place} from "../common.interfaces";
+import {Injectable} from '@angular/core';
+import {catchError, map} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/index';
+import {ApiResponse, Place} from '../common.interfaces';
 import {HandleError, HttpErrorHandler} from '../../core/http-error-handler.service';
 
 @Injectable({
@@ -19,12 +19,11 @@ export class PlacesService {
     this.handleError = httpErrorHandler.createHandleError('PlacesService');
     this.placePath = environment.API_BASE_PATH + '/places/';
   }
-  getAllPlaces(): Observable<{places: Place[]}> {
+  getAllPlaces(): Observable<Place[]> {
     return this.http.get<ApiResponse<Place[]>>(this.placePath)
       .pipe(
         map((data) => {
-          const persons = data.payload as Place[];
-          return {places: persons}
+          return data.payload as Place[];
         })
       )
   }

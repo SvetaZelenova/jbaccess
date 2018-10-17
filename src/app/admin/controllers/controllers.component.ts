@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ConfirmationService, MessageService} from "primeng/api";
-import {Controller} from "../common.interfaces";
-import {ControllersService} from "./controllers.service";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {Controller} from '../common.interfaces';
+import {ControllersService} from './controllers.service';
+import {Relation} from '../../shared/relations/relations.component';
 
 @Component({
   selector: 'app-controllers',
@@ -12,10 +13,12 @@ import {ControllersService} from "./controllers.service";
 export class ControllersComponent implements OnInit {
 
   controllers: Controller[];
+  doors: Relation[];
   controllerForm: FormGroup;
-  submitted: boolean = false;
-  isRefreshing: boolean = false;
-  displayControllerDialog: boolean = false;
+  submitted = false;
+  isRefreshing = false;
+  displayControllerDialog = false;
+  displayDoorsRelations = false;
 
   constructor(private controllersService: ControllersService,
               private formBuilder: FormBuilder,
@@ -32,11 +35,30 @@ export class ControllersComponent implements OnInit {
     });
   }
 
+  editDoors(id: number) {
+    this.doors = [];
+    this.controllersService.getDoorsRelationsByControllerId(id)
+      .subscribe( rel => {
+        this.doors = rel;
+      });
+    this.displayDoorsRelations = true;
+  }
+  updateDoorRelation(newRelation: Relation) {
+    this.controllersService.updateDoorRelation(newRelation)
+      .subscribe(
+        () => this.messageService.add({
+          severity: 'info',
+          summary: `Door ${newRelation.connected ? 'added' : 'removed'}`,
+        }),
+        () => { this.displayDoorsRelations = false; });
+    console.log(newRelation);
+    console.log(this.doors);
+  }
   loadControllers(showMessage: boolean = true) {
     this.isRefreshing = true;
     this.controllersService.getAllControllers()
       .subscribe(data => {
-        this.controllers = data.controllers;
+        this.controllers = data;
         this.isRefreshing = false;
         if (!showMessage) {
           return;
@@ -46,7 +68,7 @@ export class ControllersComponent implements OnInit {
           summary: 'Controllers table refreshed'})
       });
   }
-  displayControllerForm(controller? : Controller) {
+  displayControllerForm(controller?: Controller) {
     this.submitted = false;
     const controllerForm = controller ? controller : {id: 0, name: '', controllerId: ''};
     this.controllerForm.reset(controllerForm);
@@ -69,12 +91,12 @@ export class ControllersComponent implements OnInit {
   }
   createController(controller: Controller) {
     this.controllersService.createController(controller)
-      .subscribe( controller => {
+      .subscribe( updatedController => {
           this.loadControllers(false);
           this.hideControllerForm();
           this.messageService.add({
             severity: 'info',
-            summary: `Controller '${controller.name}' successfully created`
+            summary: `Controller '${updatedController.name}' successfully created`
           })
         },
         error => console.log('Error!', error))
@@ -82,12 +104,12 @@ export class ControllersComponent implements OnInit {
 
   updateController(controller: Controller) {
     this.controllersService.updateController(controller)
-      .subscribe(controller => {
+      .subscribe(updatedController => {
           this.loadControllers(false);
           this.hideControllerForm();
           this.messageService.add({
             severity: 'info',
-            summary: `Controller '${controller.name}' successfully updated`
+            summary: `Controller '${updatedController.name}' successfully updated`
           })
         },
         error => console.log('Error!', error))
@@ -97,7 +119,7 @@ export class ControllersComponent implements OnInit {
     const controller = this.controllers.find(c => c.id === id)
     this.confirmationService.confirm({
       message: `Are you shure want to delete controller '${controller.name}'`,
-      accept:() => {
+      accept: () => {
         this.controllersService.deleteController(id)
           .subscribe(() => {
               this.loadControllers(false);

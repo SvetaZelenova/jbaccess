@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Place} from "../common.interfaces";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {PlacesService} from "./places.service";
-import {ConfirmationService, MessageService} from "primeng/api";
+import {Place} from '../common.interfaces';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PlacesService} from './places.service';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-places',
@@ -13,9 +13,9 @@ export class PlacesComponent implements OnInit {
 
   places: Place[];
   placeForm: FormGroup;
-  submitted: boolean = false;
-  isRefreshing: boolean = false;
-  displayPlaceDialog: boolean = false;
+  submitted = false;
+  isRefreshing = false;
+  displayPlaceDialog = false;
 
   constructor(private placesService: PlacesService,
               private formBuilder: FormBuilder,
@@ -35,7 +35,7 @@ export class PlacesComponent implements OnInit {
     this.isRefreshing = true;
     this.placesService.getAllPlaces()
       .subscribe(data => {
-        this.places = data.places;
+        this.places = data;
         this.isRefreshing = false;
         if (!showMessage) {
           return;
@@ -69,24 +69,24 @@ export class PlacesComponent implements OnInit {
   }
   createPlace(place: Place) {
     this.placesService.createPlace(place)
-      .subscribe( place => {
+      .subscribe( updatedPlace => {
         this.loadPlaces(false);
         this.hidePlaceForm();
         this.messageService.add({
           severity: 'info',
-          summary: `Ne place '${place.name} successfully created`
+          summary: `Ne place '${updatedPlace.name} successfully created`
         })
       },
         error => console.log('Error!', error))
   }
   updatePlace(place: Place) {
     this.placesService.updatePlace(place)
-      .subscribe(place => {
+      .subscribe(updatedPlace => {
         this.loadPlaces(false);
         this.hidePlaceForm();
         this.messageService.add({
           severity: 'info',
-          summary: `Place '${place.name}' successfully updated`
+          summary: `Place '${updatedPlace.name}' successfully updated`
         })
       })
   }

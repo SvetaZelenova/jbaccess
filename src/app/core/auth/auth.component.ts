@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from './auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -12,8 +11,7 @@ export class AuthComponent implements OnInit {
 
   logInForm: FormGroup;
   constructor(private fb: FormBuilder,
-              private loginService: AuthService,
-              private router: Router) { }
+              private loginService: AuthService) { }
 
   ngOnInit() {
     this.logInForm = this.fb.group({
@@ -24,5 +22,4 @@ export class AuthComponent implements OnInit {
   onSubmit() {
     this.loginService.login(this.logInForm.value)
   }
-
 }
