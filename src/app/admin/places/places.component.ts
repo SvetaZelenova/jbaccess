@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Place} from '../common.interfaces';
+import {Controller, Place} from '../common.interfaces';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PlacesService} from './places.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {Relation} from '../../shared/relations/relations.component';
 
 @Component({
   selector: 'app-places',
@@ -12,10 +13,14 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 export class PlacesComponent implements OnInit {
 
   places: Place[];
+  doors: Relation[];
   placeForm: FormGroup;
   submitted = false;
   isRefreshing = false;
   displayPlaceDialog = false;
+  displayDoorsRelations = false;
+  currentPlace: Place;
+  doorsFormTitle: string;
 
   constructor(private placesService: PlacesService,
               private formBuilder: FormBuilder,
@@ -30,7 +35,28 @@ export class PlacesComponent implements OnInit {
       name: ['', Validators.required]
     })
   }
-
+  editDoors(place: Place) {
+    this.currentPlace = place;
+    this.doorsFormTitle = `Doors for ${place.name}`;
+    this.doors = [];
+    this.placesService.getDoorsRelationsByPlaceId(place.id)
+      .subscribe( rel => {
+        this.doors = rel;
+      });
+    this.displayDoorsRelations = true;
+  }
+  updateDoorRelation(newRelation: Relation) {
+    this.placesService.updateDoorRelation(newRelation)
+      .subscribe(
+        () => this.messageService.add({
+          severity: 'info',
+          summary: `Door ${newRelation.connected ? 'added' : 'removed'}`,
+          detail: `Door ${newRelation.relatedEntityDisplayName}
+            ${newRelation.connected ? 'added' : 'removed'}
+            to ${this.currentPlace.name}`
+        }),
+        () => { this.displayDoorsRelations = false; });
+  }
   loadPlaces(showMessage: boolean = true) {
     this.isRefreshing = true;
     this.placesService.getAllPlaces()
