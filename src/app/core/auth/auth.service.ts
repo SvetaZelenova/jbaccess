@@ -27,6 +27,7 @@ export class AuthService extends CacheService {
 
   private readonly handleError: HandleError;
   private readonly authPath: string;
+  public redirectUrl: string;
 
   constructor(private http: HttpClient,
               private httpErrorHandler: HttpErrorHandler,
@@ -43,6 +44,7 @@ export class AuthService extends CacheService {
       )
       .subscribe(user => {
         this.updateAuthStatus(user);
+        this.router.navigate([this.redirectUrl])
       }, error => {
         if (error.hasOwnProperty('serviceObject') && error.serviceObject.errorMessage === 'Unauthorized') {
           this.authStatus.next(defaultAuthStatus);

@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    this.loginService.redirectUrl = state.url;
     return this.loginService.authStatus.pipe(
       map( status => status.isAuthenticated)
     );
