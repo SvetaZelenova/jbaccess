@@ -84,8 +84,11 @@ export class PersonService {
           const personRoles = data[0].payload as Role[];
           const allRoles = data[1].payload as Role[];
           const res = Array<RoleViewModel>();
+
           allRoles.forEach(role => {
-            if (personRoles.indexOf(role) !== -1) {
+            if (personRoles.some(function (item) {
+              return item.name === role.name && item.id === role.id
+            })) {
               res.push({
                 id: role.id,
                 name: role.name,
@@ -102,5 +105,11 @@ export class PersonService {
           return {roles: res}
         })
       )
+  }
+  attachRoleToPerson(personId, roleId):Observable<{}> {
+    return this.http.put<ApiResponse<any>>(this.personPath + personId + '/roles/' + roleId, null)
+  }
+  detachRoleFromPerson(personId, roleId): Observable<{}> {
+    return this.http.delete<ApiResponse<any>>(this.personPath + personId + '/roles/' + roleId)
   }
 }

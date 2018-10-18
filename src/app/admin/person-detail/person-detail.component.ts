@@ -44,6 +44,19 @@ export class PersonDetailComponent implements OnInit {
         this.roles = data.roles
       })
   }
+  switchChange(personId, roleId, e) {
+    if (e.checked) {
+      this.personService.attachRoleToPerson(personId, roleId)
+        .subscribe(() => {
+          console.log('Role attached')
+        })
+    } else {
+      this.personService.detachRoleFromPerson(personId, roleId)
+        .subscribe(() => {
+          console.log('Role detached')
+        })
+    }
+  }
   backToTable() {
     this.location.back()
   }
