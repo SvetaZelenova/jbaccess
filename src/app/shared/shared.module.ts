@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 import {TableModule} from 'primeng/table';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
@@ -13,11 +14,13 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ToolbarModule} from 'primeng/toolbar';
 import {TabViewModule} from 'primeng/tabview';
 import {InputSwitchModule} from 'primeng/inputswitch';
+import { RelationsComponent } from './relations/relations.component';
 
 @NgModule({
 
   imports: [
     CommonModule,
+    FormsModule,
     TableModule,
     AngularFontAwesomeModule,
     ButtonModule,
@@ -31,7 +34,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     TabViewModule,
     InputSwitchModule
   ],
-  declarations: [],
+  declarations: [RelationsComponent],
   exports: [
     TableModule,
     AngularFontAwesomeModule,
@@ -44,7 +47,8 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     ConfirmDialogModule,
     ToolbarModule,
     TabViewModule,
-    InputSwitchModule
+    InputSwitchModule,
+    RelationsComponent
   ]
 })
 export class SharedModule { }

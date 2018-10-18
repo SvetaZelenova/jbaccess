@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {ApiResponse, Door} from "../common.interfaces";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {HttpErrorHandler, HandleError} from "../../core/http-error-handler.service";
-import {catchError, map} from "rxjs/operators";
-import {Observable} from "rxjs/index";
+import {ApiResponse, Door, Place} from '../common.interfaces';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {HttpErrorHandler, HandleError} from '../../core/http-error-handler.service';
+import {catchError, map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +19,10 @@ export class DoorsService {
     this.handleError = httpErrorHandler.createHandleError('DoorsService');
     this.doorPath = environment.API_BASE_PATH + '/doors/';
   }
-  getAllDoors(): Observable<{doors: Door[]}> {
+  getAllDoors(): Observable<Door[]> {
     return this.http.get<ApiResponse<Door[]>>(this.doorPath)
       .pipe(
-        map((data) => {
-          const doors = data.payload as Door[];
-          return {doors: doors}
-        })
+        map(res => res.payload)
       )
   }
   createDoor(door: Door): Observable<Door> {

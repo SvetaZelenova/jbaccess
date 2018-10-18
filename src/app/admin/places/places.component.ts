@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Place} from "../common.interfaces";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {PlacesService} from "./places.service";
-import {ConfirmationService, MessageService} from "primeng/api";
+import {Controller, Place} from '../common.interfaces';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PlacesService} from './places.service';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {Relation} from '../../shared/relations/relations.component';
 
 @Component({
   selector: 'app-places',
@@ -12,10 +13,14 @@ import {ConfirmationService, MessageService} from "primeng/api";
 export class PlacesComponent implements OnInit {
 
   places: Place[];
+  doors: Relation[];
   placeForm: FormGroup;
-  submitted: boolean = false;
-  isRefreshing: boolean = false;
-  displayPlaceDialog: boolean = false;
+  submitted = false;
+  isRefreshing = false;
+  displayPlaceDialog = false;
+  displayDoorsRelations = false;
+  currentPlace: Place;
+  doorsFormTitle: string;
 
   constructor(private placesService: PlacesService,
               private formBuilder: FormBuilder,
@@ -30,12 +35,33 @@ export class PlacesComponent implements OnInit {
       name: ['', Validators.required]
     })
   }
-
+  editDoors(place: Place) {
+    this.currentPlace = place;
+    this.doorsFormTitle = `Doors for ${place.name}`;
+    this.doors = [];
+    this.placesService.getDoorsRelationsByPlaceId(place.id)
+      .subscribe( rel => {
+        this.doors = rel;
+      });
+    this.displayDoorsRelations = true;
+  }
+  updateDoorRelation(newRelation: Relation) {
+    this.placesService.updateDoorRelation(newRelation)
+      .subscribe(
+        () => this.messageService.add({
+          severity: 'info',
+          summary: `Door ${newRelation.connected ? 'added' : 'removed'}`,
+          detail: `Door ${newRelation.relatedEntityDisplayName}
+            ${newRelation.connected ? 'added' : 'removed'}
+            to ${this.currentPlace.name}`
+        }),
+        () => { this.displayDoorsRelations = false; });
+  }
   loadPlaces(showMessage: boolean = true) {
     this.isRefreshing = true;
     this.placesService.getAllPlaces()
       .subscribe(data => {
-        this.places = data.places;
+        this.places = data;
         this.isRefreshing = false;
         if (!showMessage) {
           return;
@@ -69,24 +95,24 @@ export class PlacesComponent implements OnInit {
   }
   createPlace(place: Place) {
     this.placesService.createPlace(place)
-      .subscribe( place => {
+      .subscribe( updatedPlace => {
         this.loadPlaces(false);
         this.hidePlaceForm();
         this.messageService.add({
           severity: 'info',
-          summary: `Ne place '${place.name} successfully created`
+          summary: `Ne place '${updatedPlace.name} successfully created`
         })
       },
         error => console.log('Error!', error))
   }
   updatePlace(place: Place) {
     this.placesService.updatePlace(place)
-      .subscribe(place => {
+      .subscribe(updatedPlace => {
         this.loadPlaces(false);
         this.hidePlaceForm();
         this.messageService.add({
           severity: 'info',
-          summary: `Place '${place.name}' successfully updated`
+          summary: `Place '${updatedPlace.name}' successfully updated`
         })
       })
   }

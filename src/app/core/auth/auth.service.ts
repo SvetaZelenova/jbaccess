@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {ApiResponse, Login, User} from '../../admin/common.interfaces';
-import { Observable, BehaviorSubject } from 'rxjs';
-import {HandleError, HttpErrorHandler} from '../http-error-handler.service';
-import {environment} from '../../../environments/environment';
-import {catchError, map, tap} from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ApiResponse, Login, User } from '../../admin/common.interfaces';
+import { BehaviorSubject } from 'rxjs';
+import { HandleError, HttpErrorHandler } from '../http-error-handler.service';
+import { environment } from '../../../environments/environment';
+import { catchError, map } from 'rxjs/operators';
 import { CacheService } from './cache.service';
 
 export interface IAuthStatus {
@@ -15,7 +15,7 @@ export interface IAuthStatus {
 export const defaultAuthStatus = {
   isAuthenticated: false,
   user: null
-}
+};
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +86,8 @@ export class AuthService extends CacheService {
     };
     this.authStatus.next(newStatus);
     this.setItem('authStatus', newStatus);
-    this.router.navigate(['/']);
+    if (this.router.url === '/login') {
+      this.router.navigate(['/']);
+    }
   }
 }

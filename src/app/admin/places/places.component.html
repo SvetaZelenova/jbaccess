@@ -21,6 +21,8 @@
       <td>{{place.id}}</td>
       <td>{{place.name}}</td>
       <td>
+        <p-button styleClass="ui-button-secondary" label="Doors"  (onClick)="editDoors(place)"></p-button>
+        &nbsp;
         <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayPlaceForm(place)"></p-button>
         &nbsp;
         <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deletePlace(place.id)"></p-button>
@@ -49,5 +51,9 @@
     <br>
     <p-button [disabled]="!placeForm.valid" styleClass="ui-button-info" label="Save" type="submit"></p-button>
   </form>
+</p-dialog>
+
+<p-dialog header="{{ doorsFormTitle }}" [modal]="true" [(visible)]="displayDoorsRelations">
+  <app-relations *ngFor="let rel of doors" [relation]="rel" (updateRelation)="updateDoorRelation($event)"></app-relations>
 </p-dialog>
 
