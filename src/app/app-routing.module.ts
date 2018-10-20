@@ -1,19 +1,27 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
-import {AdminComponent} from "./admin/admin.component";
 import {AuthGuard} from "./core/auth/auth.guard";
 import {AuthComponent} from "./core/auth/auth.component";
+import {PageNotFoundComponent} from "./core/page-not-found/page-not-found.component";
 
 const routes: Routes = [
   {
+    path: 'login',
+    component: AuthComponent
+  },
+  {
+    path: 'not-found',
+    component: PageNotFoundComponent
+  },
+  {
     path: '',
-    redirectTo: 'person',
+    redirectTo: 'admin/person',
     pathMatch: 'full',
     canActivate: [AuthGuard],
   },
   {
-    path: 'login',
-    component: AuthComponent
+    path: '**',
+    component: PageNotFoundComponent
   }
 ];
 

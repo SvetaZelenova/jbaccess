@@ -23,12 +23,12 @@ import {CaseInterceptor} from './case.interceptor';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     CoreModule,
     AdminModule,
-    SharedModule
+    SharedModule,
+    AppRoutingModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -13,7 +13,7 @@ import {ControllersComponent} from "./controllers/controllers.component";
 
 const routes: Routes = [
   {
-    path: '', component: AdminComponent,
+    path: 'admin', component: AdminComponent,
     canActivate: [AuthGuard],
     children: [
       {
