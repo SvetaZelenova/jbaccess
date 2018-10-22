@@ -1,9 +1,9 @@
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { KeyViewModel } from './key.viewmodel'
-import { KeysService } from './keys.service'
-import {Person} from '../common.interfaces';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import { KeyViewModel } from './key.viewmodel';
+import { KeysService } from './keys.service';
+import { Person } from '../common.interfaces';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-keys',
@@ -20,7 +20,8 @@ export class KeysComponent implements OnInit {
     private keysService: KeysService,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    private  confirmationService: ConfirmationService) { }
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit() {
     this.loadKeysAndPersons(false);
@@ -30,7 +31,7 @@ export class KeysComponent implements OnInit {
       name: ['', Validators.required],
       accessKey: ['', Validators.required],
       person: [null, Validators.required]
-    })
+    });
   }
 
   loadKeysAndPersons(showMessage: boolean = true) {
@@ -45,12 +46,14 @@ export class KeysComponent implements OnInit {
       this.messageService.add({
         severity: 'info',
         summary: `Keys table refreshed`
-      })
+      });
     });
   }
   displayKeyForm(key?: KeyViewModel) {
     this.submitted = false;
-    const formKey = key ? key : {id: 0, name: '', accessKey: '', person: null};
+    const formKey = key
+      ? key
+      : { id: 0, name: '', accessKey: '', person: null };
     this.keyForm.reset(formKey);
     this.displayCreateKeyDialog = true;
   }
@@ -71,42 +74,38 @@ export class KeysComponent implements OnInit {
     }
   }
   createKey(key: KeyViewModel) {
-    this.keysService.createKey(key)
-      .subscribe(newKey => {
-        this.hideKeyForm();
-        this.keys.push(newKey);
-        this.messageService.add({
-          severity: 'info',
-          summary: `New key '${key.name}' successfully created`
-        })
+    this.keysService.createKey(key).subscribe(newKey => {
+      this.hideKeyForm();
+      this.keys.push(newKey);
+      this.messageService.add({
+        severity: 'info',
+        summary: `New key '${key.name}' successfully created`
       });
+    });
   }
   updateKey(key: KeyViewModel) {
-    this.keysService.updateKey(key)
-      .subscribe(newKey => {
-        this.hideKeyForm();
-        this.keys.splice(this.keys.map(k => k.id).indexOf(newKey.id), 1, newKey);
-        this.messageService.add({
-          severity: 'info',
-          summary: `Key with id='${key.id}' successfully updated`
-        })
+    this.keysService.updateKey(key).subscribe(newKey => {
+      this.hideKeyForm();
+      this.keys.splice(this.keys.map(k => k.id).indexOf(newKey.id), 1, newKey);
+      this.messageService.add({
+        severity: 'info',
+        summary: `Key with id='${key.id}' successfully updated`
       });
+    });
   }
   deleteKey(id: number) {
     const key = this.keys.find(k => k.id === id);
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${key.id}: ${key.name} key?`,
       accept: () => {
-        this.keysService.deleteKey(id)
-          .subscribe( d => {
-            this.keys.splice(this.keys.map(k => k.id).indexOf(id), 1);
-            this.messageService.add({
-              severity: 'info',
-              summary: `Key with id='${d}' successfully removed`
-            })
-          })
+        this.keysService.deleteKey(id).subscribe(d => {
+          this.keys.splice(this.keys.map(k => k.id).indexOf(id), 1);
+          this.messageService.add({
+            severity: 'info',
+            summary: `Key with id='${d}' successfully removed`
+          });
+        });
       }
     });
   }
-
 }

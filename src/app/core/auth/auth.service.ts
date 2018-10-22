@@ -9,8 +9,8 @@ import { catchError, map } from 'rxjs/operators';
 import { CacheService } from './cache.service';
 
 export interface IAuthStatus {
-  isAuthenticated: boolean
-  user: User
+  isAuthenticated: boolean;
+  user: User;
 }
 export const defaultAuthStatus = {
   isAuthenticated: false,
@@ -29,59 +29,78 @@ export class AuthService extends CacheService {
   private readonly authPath: string;
   public redirectUrl: string;
 
-  constructor(private http: HttpClient,
-              private httpErrorHandler: HttpErrorHandler,
-              private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private httpErrorHandler: HttpErrorHandler,
+    private router: Router
+  ) {
     super();
     this.handleError = httpErrorHandler.createHandleError('AuthService');
     this.authPath = environment.API_BASE_PATH + '/security/';
   }
   login(credentials: Login) {
-    this.http.post<ApiResponse<User>>(this.authPath + 'login', credentials)
+    this.http
+      .post<ApiResponse<User>>(this.authPath + 'login', credentials)
       .pipe(
         map(res => res.payload),
         catchError(this.handleError<User>('login', null))
       )
-      .subscribe(user => {
-        this.updateAuthStatus(user);
-        this.router.navigate([this.redirectUrl])
-      }, error => {
-        if (error.hasOwnProperty('serviceObject') && error.serviceObject.errorMessage === 'Unauthorized') {
-          this.authStatus.next(defaultAuthStatus);
-          this.router.navigate(['login']);
+      .subscribe(
+        user => {
+          this.updateAuthStatus(user);
+          this.router.navigate([this.redirectUrl]);
+        },
+        error => {
+          if (
+            error.hasOwnProperty('serviceObject') &&
+            error.serviceObject.errorMessage === 'Unauthorized'
+          ) {
+            this.authStatus.next(defaultAuthStatus);
+            this.router.navigate(['login']);
+          }
         }
-      });
+      );
   }
   restoreSession() {
-    this.http.get<ApiResponse<User>>(this.authPath + 'restore-session')
+    this.http
+      .get<ApiResponse<User>>(this.authPath + 'restore-session')
       .pipe(
         map(res => res.payload),
         catchError(this.handleError<User>('restoreSession', null))
       )
-      .subscribe( user => {
-        this.updateAuthStatus(user);
-      },
+      .subscribe(
+        user => {
+          this.updateAuthStatus(user);
+        },
         error => {
-        if (error.hasOwnProperty('serviceObject') && error.serviceObject.errorMessage === 'Unauthorized') {
-          this.authStatus.next(defaultAuthStatus);
-          this.router.navigate(['login']);
+          if (
+            error.hasOwnProperty('serviceObject') &&
+            error.serviceObject.errorMessage === 'Unauthorized'
+          ) {
+            this.authStatus.next(defaultAuthStatus);
+            this.router.navigate(['login']);
+          }
         }
-        });
+      );
   }
   logout() {
-    this.http.get<ApiResponse<any>>(this.authPath + 'logout')
-      .pipe(
-        catchError(this.handleError<any>('logout', null))
-      )
+    this.http
+      .get<ApiResponse<any>>(this.authPath + 'logout')
+      .pipe(catchError(this.handleError<any>('logout', null)))
       .subscribe(
         () => {
           this.authStatus.next(defaultAuthStatus);
         },
         null,
-        () => { this.router.navigate(['login']); });
+        () => {
+          this.router.navigate(['login']);
+        }
+      );
   }
   private updateAuthStatus(user: User) {
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     const newStatus = {
       isAuthenticated: true,
       user: user

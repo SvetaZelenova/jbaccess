@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import { SecurityService} from '@anatolyua/jbaccess-client-open-api';
-import {AuthService} from './core/auth/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './core/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +7,7 @@ import {AuthService} from './core/auth/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
-  constructor (private securityService: SecurityService,
-               private loginService: AuthService) {}
+  constructor(private loginService: AuthService) {}
   ngOnInit() {
     this.loginService.restoreSession();
   }

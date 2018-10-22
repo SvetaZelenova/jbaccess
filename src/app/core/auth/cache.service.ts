@@ -1,24 +1,24 @@
 export abstract class CacheService {
   protected getItem<T>(key: string): T {
-    const data = localStorage.getItem(key)
+    const data = localStorage.getItem(key);
     if (data && data !== 'undefined') {
-      return JSON.parse(data)
+      return JSON.parse(data);
     }
-    return null
+    return null;
   }
 
   protected setItem(key: string, data: object | string) {
     if (typeof data === 'string') {
-      localStorage.setItem(key, data)
+      localStorage.setItem(key, data);
     }
-    localStorage.setItem(key, JSON.stringify(data))
+    localStorage.setItem(key, JSON.stringify(data));
   }
 
   protected removeItem(key: string) {
-    localStorage.removeItem(key)
+    localStorage.removeItem(key);
   }
 
   protected clear() {
-    localStorage.clear()
+    localStorage.clear();
   }
 }

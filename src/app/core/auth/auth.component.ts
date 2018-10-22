@@ -8,10 +8,8 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-
   logInForm: FormGroup;
-  constructor(private fb: FormBuilder,
-              private loginService: AuthService) { }
+  constructor(private fb: FormBuilder, private loginService: AuthService) {}
 
   ngOnInit() {
     this.logInForm = this.fb.group({
@@ -20,6 +18,6 @@ export class AuthComponent implements OnInit {
     });
   }
   onSubmit() {
-    this.loginService.login(this.logInForm.value)
+    this.loginService.login(this.logInForm.value);
   }
 }
