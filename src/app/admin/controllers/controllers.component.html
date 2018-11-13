@@ -1,4 +1,4 @@
-<p-table #controllersTable [value]="controllers" [paginator]="true" [rows]="10" [globalFilterFields]="['name']">
+<p-table #controllersTable [value]="controllers" [paginator]="true" [rows]="10" [globalFilterFields]="['name']" [responsive]="true">
   <ng-template pTemplate="caption">
     <div class="ui-toolbar-group-left">
       <p-button styleClass="ui-button-primary" label="Add" icon="fa fa-plus" (onClick)="displayControllerForm()"></p-button>
