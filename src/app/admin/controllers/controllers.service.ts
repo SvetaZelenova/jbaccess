@@ -64,7 +64,7 @@ export class ControllersService {
             parentId: id,
             relatedEntityId: door.id,
             relatedEntityDisplayName: door.id + ': ' + door.name,
-            inProgress: false,
+            updating: false,
             connected: relatedDoors.some(d => d.id === door.id)
           });
         });

@@ -127,5 +127,5 @@
     "component-class-suffix": true,
     "directive-class-suffix": true
   },
-  "extends": ["tslint:latest", "tslint-config-prettier"]
+  "extends": ["tslint-config-prettier"]
 }

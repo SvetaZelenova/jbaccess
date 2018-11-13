@@ -1,0 +1,11 @@
+div {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: lightgrey dotted 1px;
+  margin-bottom: 5px;
+
+  label {
+    padding-left: 10px;
+  }
+}

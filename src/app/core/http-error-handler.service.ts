@@ -47,7 +47,6 @@ export class HttpErrorHandler {
    */
   handleError<T>(serviceName = '', operation = 'operation', result = {} as T) {
     return (error: HttpErrorResponse): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
       if (isApiResponse(error.error)) {
         const errorObj = CaseModifier.camelizeKeys(
           error.error.service

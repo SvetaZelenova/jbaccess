@@ -5,7 +5,7 @@ export interface Relation {
   relatedEntityId: number,
   relatedEntityDisplayName: string,
   connected: boolean,
-  inProgress: boolean
+  updating: boolean
 }
 
 @Component({
