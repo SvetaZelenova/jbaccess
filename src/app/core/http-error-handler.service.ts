@@ -7,7 +7,7 @@ import { CaseModifier } from '../shared/case.modifier';
 import { ApiResponse, ServiceObject } from '../admin/common.interfaces';
 
 function isApiResponse(obj: any): obj is ApiResponse<any> {
-  return 'payload' in obj && 'service' in obj;
+  return obj && 'payload' in obj && 'service' in obj;
 }
 
 export interface FormError {
@@ -52,6 +52,13 @@ export class HttpErrorHandler {
           error.error.service
         ) as ServiceObject;
         const appError = this.processError(errorObj, serviceName, operation);
+        this.messageService.add({
+          severity: 'error',
+          summary: appError.title,
+          detail: appError.message,
+          data: appError.formErrors,
+          sticky: true
+        });
         return throwError(appError);
       }
       const message =
@@ -88,7 +95,7 @@ export class HttpErrorHandler {
     }
     return {
       title: `${serviceName}: ${operation} failed`,
-      message: '',
+      message: err.errorMessage,
       formErrors: formErrors,
       validationErrors: err.validationErrors,
       serviceObject: err
