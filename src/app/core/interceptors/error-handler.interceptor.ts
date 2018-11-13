@@ -30,7 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         },
         (error: any) => {
           if (error instanceof HttpErrorResponse) {
-            if (error.status === 404) {
+            if (error.status === 404 && req.method === 'GET') {
               this.router.navigate(['not-found']);
             }
           }
