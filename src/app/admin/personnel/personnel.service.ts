@@ -10,7 +10,7 @@ import {
   HttpErrorHandler
 } from '../../core/http-error-handler.service';
 import { ApiResponse, Key, Person, Role } from '../common.interfaces';
-import { RoleViewModel } from '../person-detail/role.viewmodel';
+import { RoleViewModel } from './person-detail/role.viewmodel';
 import { KeyViewModel } from '../keys/key.viewmodel';
 
 @Injectable({

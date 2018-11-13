@@ -1,4 +1,4 @@
-import { Role } from '../common.interfaces';
+import { Role } from '../../common.interfaces';
 
 export interface RoleViewModel extends Role {
   checked: boolean;

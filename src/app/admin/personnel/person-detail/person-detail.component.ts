@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Key, Person, Role } from '../common.interfaces';
-import { PersonService } from '../personnel/personnel.service';
+import { Key, Person, Role } from '../../common.interfaces';
+import { PersonService } from '../personnel.service';
 
 @Component({
   selector: 'app-person-detail',
