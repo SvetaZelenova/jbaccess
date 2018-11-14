@@ -82,7 +82,7 @@ export class DoorsComponent implements OnInit {
           summary: `Door '${newDoor.name}' successfully created`
         });
       },
-      error => console.log('Error!', error)
+      error => this.hideDoorForm()
     );
   }
 
@@ -96,7 +96,7 @@ export class DoorsComponent implements OnInit {
           summary: `Door '${updatedDoor.name}' successfully updated`
         });
       },
-      error => console.log('Error!', error)
+      error => this.hideDoorForm()
     );
   }
 
@@ -113,7 +113,7 @@ export class DoorsComponent implements OnInit {
               summary: `Door '${door.name}' successfully removed`
             });
           },
-          error => console.log(error)
+          error => this.hideDoorForm()
         );
       }
     });

@@ -74,24 +74,34 @@ export class KeysComponent implements OnInit {
     }
   }
   createKey(key: KeyViewModel) {
-    this.keysService.createKey(key).subscribe(newKey => {
-      this.hideKeyForm();
-      this.keys.push(newKey);
-      this.messageService.add({
-        severity: 'info',
-        summary: `New key '${key.name}' successfully created`
-      });
-    });
+    this.keysService.createKey(key).subscribe(
+      newKey => {
+        this.hideKeyForm();
+        this.keys.push(newKey);
+        this.messageService.add({
+          severity: 'info',
+          summary: `New key '${key.name}' successfully created`
+        });
+      },
+      error => this.hideKeyForm()
+    );
   }
   updateKey(key: KeyViewModel) {
-    this.keysService.updateKey(key).subscribe(newKey => {
-      this.hideKeyForm();
-      this.keys.splice(this.keys.map(k => k.id).indexOf(newKey.id), 1, newKey);
-      this.messageService.add({
-        severity: 'info',
-        summary: `Key with id='${key.id}' successfully updated`
-      });
-    });
+    this.keysService.updateKey(key).subscribe(
+      newKey => {
+        this.hideKeyForm();
+        this.keys.splice(
+          this.keys.map(k => k.id).indexOf(newKey.id),
+          1,
+          newKey
+        );
+        this.messageService.add({
+          severity: 'info',
+          summary: `Key with id='${key.id}' successfully updated`
+        });
+      },
+      error => this.hideKeyForm()
+    );
   }
   deleteKey(id: number) {
     const key = this.keys.find(k => k.id === id);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Controller, Place } from '../common.interfaces';
+import { Place } from '../common.interfaces';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from './places.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -55,9 +55,7 @@ export class PlacesComponent implements OnInit {
             ${newRelation.connected ? 'added' : 'removed'}
             to ${this.currentPlace.name}`
         }),
-      () => {
-        this.displayDoorsRelations = false;
-      }
+      error => (this.displayDoorsRelations = false)
     );
   }
   loadPlaces(showMessage: boolean = true) {
@@ -105,18 +103,21 @@ export class PlacesComponent implements OnInit {
           summary: `Ne place '${updatedPlace.name} successfully created`
         });
       },
-      error => console.log('Error!', error)
+      error => this.hidePlaceForm()
     );
   }
   updatePlace(place: Place) {
-    this.placesService.updatePlace(place).subscribe(updatedPlace => {
-      this.loadPlaces(false);
-      this.hidePlaceForm();
-      this.messageService.add({
-        severity: 'info',
-        summary: `Place '${updatedPlace.name}' successfully updated`
-      });
-    });
+    this.placesService.updatePlace(place).subscribe(
+      updatedPlace => {
+        this.loadPlaces(false);
+        this.hidePlaceForm();
+        this.messageService.add({
+          severity: 'info',
+          summary: `Place '${updatedPlace.name}' successfully updated`
+        });
+      },
+      error => this.hidePlaceForm()
+    );
   }
 
   deletePlace(id: number) {
@@ -132,7 +133,7 @@ export class PlacesComponent implements OnInit {
               summary: `Place '${place.name}' successfully removed`
             });
           },
-          error => console.log(error)
+          error => this.loadPlaces(false)
         );
       }
     });

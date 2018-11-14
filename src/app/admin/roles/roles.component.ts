@@ -12,9 +12,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class RolesComponent implements OnInit {
   roles: Role[];
   roleForm: FormGroup;
-  isRefreshing: boolean = false;
-  submitted: boolean = false;
-  displayRoleDialog: boolean = false;
+  isRefreshing = false;
+  submitted = false;
+  displayRoleDialog = false;
 
   constructor(
     private rolesService: RolesService,
@@ -68,28 +68,28 @@ export class RolesComponent implements OnInit {
   }
   createRole(role: Role) {
     this.rolesService.createRole(role).subscribe(
-      role => {
+      newRole => {
         this.loadRoles(false);
         this.hideRoleForm();
         this.messageService.add({
           severity: 'info',
-          summary: `Role '${role.name}' successfully created`
+          summary: `Role '${newRole.name}' successfully created`
         });
       },
-      error => console.log(error)
+      error => this.hideRoleForm()
     );
   }
   updateRole(role: Role) {
     this.rolesService.updateRole(role).subscribe(
-      role => {
+      newRole => {
         this.loadRoles(false);
         this.hideRoleForm();
         this.messageService.add({
           severity: 'info',
-          summary: `Role '${role.name}' successfully updated`
+          summary: `Role '${newRole.name}' successfully updated`
         });
       },
-      error => console.log(error)
+      error => this.hideRoleForm()
     );
   }
   deleteRole(id: number) {
@@ -105,7 +105,7 @@ export class RolesComponent implements OnInit {
               summary: `Role '${role.name}' successfully removed`
             });
           },
-          error => console.log(error)
+          error => this.loadRoles(false)
         );
       }
     });

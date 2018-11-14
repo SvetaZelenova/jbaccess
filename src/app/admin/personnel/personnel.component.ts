@@ -69,27 +69,30 @@ export class PersonnelComponent implements OnInit {
   }
   createPerson(person: Person) {
     this.personService.createPerson(person).subscribe(
-      person => {
+      newPrson => {
         this.loadPersonnel(false);
         this.hidePersonDialog();
         this.messageService.add({
           severity: 'info',
-          summary: `New person '${person.name}' successfully created`
+          summary: `New person '${newPrson.name}' successfully created`
         });
       },
 
-      error => console.log('Error!', error)
+      error => this.hidePersonDialog()
     );
   }
   updatePerson(person: Person) {
-    this.personService.updatePerson(person).subscribe(person => {
-      this.loadPersonnel(false);
-      this.hidePersonDialog();
-      this.messageService.add({
-        severity: 'info',
-        summary: `Person '${person.name}' successfully updated`
-      });
-    });
+    this.personService.updatePerson(person).subscribe(
+      newPerson => {
+        this.loadPersonnel(false);
+        this.hidePersonDialog();
+        this.messageService.add({
+          severity: 'info',
+          summary: `Person '${newPerson.name}' successfully updated`
+        });
+      },
+      error => this.hidePersonDialog()
+    );
   }
   deletePerson(id: number) {
     const person = this.persons.find(p => p.id === id);
@@ -104,7 +107,7 @@ export class PersonnelComponent implements OnInit {
               summary: `Person '${person.name}' successfully removed`
             });
           },
-          error => console.log(error)
+          error => this.loadPersonnel(false)
         );
       }
     });

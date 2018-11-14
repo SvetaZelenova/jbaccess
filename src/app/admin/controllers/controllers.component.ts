@@ -59,9 +59,7 @@ export class ControllersComponent implements OnInit {
             ${newRelation.connected ? 'added' : 'removed'}
             to ${this.currentController.name}`
         }),
-      () => {
-        this.displayDoorsRelations = false;
-      }
+      error => (this.displayDoorsRelations = false)
     );
   }
   loadControllers(showMessage: boolean = true) {
@@ -111,7 +109,7 @@ export class ControllersComponent implements OnInit {
           summary: `Controller '${updatedController.name}' successfully created`
         });
       },
-      error => console.log('Error!', error)
+      error => this.hideControllerForm()
     );
   }
 
@@ -125,14 +123,16 @@ export class ControllersComponent implements OnInit {
           summary: `Controller '${updatedController.name}' successfully updated`
         });
       },
-      error => console.log('Error!', error)
+      error => this.hideControllerForm()
     );
   }
 
   deleteController(id: number) {
     const controller = this.controllers.find(c => c.id === id);
     this.confirmationService.confirm({
-      message: `Are you shure want to delete controller '${controller.name}'`,
+      message: `Are you sure you want to delete controller '${
+        controller.name
+      }'`,
       accept: () => {
         this.controllersService.deleteController(id).subscribe(
           () => {
@@ -142,7 +142,7 @@ export class ControllersComponent implements OnInit {
               summary: `Controller '${controller.name}' successfully removed`
             });
           },
-          error => console.log(error)
+          error => this.loadControllers(false)
         );
       }
     });
