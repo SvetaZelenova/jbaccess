@@ -10,7 +10,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
-import { CaseModifier } from './shared/case.modifier';
+import { CaseModifier } from '../../shared/case.modifier';
 
 /** Pass untouched request through to the next request handler. */
 @Injectable()

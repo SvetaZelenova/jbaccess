@@ -10,9 +10,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
 import { AdminModule } from './admin/admin.module';
 import { SharedModule } from './shared/shared.module';
-import { AuthInterceptor } from './auth.interceptor';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { HttpErrorHandler } from './core/http-error-handler.service';
-import { CaseInterceptor } from './case.interceptor';
+import { CaseInterceptor } from './core/interceptors/case.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
