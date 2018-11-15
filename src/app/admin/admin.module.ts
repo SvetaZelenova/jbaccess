@@ -10,7 +10,6 @@ import { AdminComponent } from './admin.component';
 
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
-import { PersonDetailComponent } from './personnel/person-detail/person-detail.component';
 import { KeysComponent } from './keys/keys.component';
 import { ConfirmationService } from 'primeng/api';
 import { DoorsComponent } from './doors/doors.component';
@@ -30,7 +29,6 @@ import { ControllersComponent } from './controllers/controllers.component';
     AdminComponent,
     PersonnelComponent,
     PlacesComponent,
-    PersonDetailComponent,
     KeysComponent,
     DoorsComponent,
     RolesComponent,

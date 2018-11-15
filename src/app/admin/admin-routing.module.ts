@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PersonnelComponent } from './personnel/personnel.component';
 import { PlacesComponent } from './places/places.component';
 import { AdminComponent } from './admin.component';
-import { PersonDetailComponent } from './personnel/person-detail/person-detail.component';
 import { AuthGuard } from '../core/auth/auth.guard';
 import { KeysComponent } from './keys/keys.component';
 import { DoorsComponent } from './doors/doors.component';
@@ -24,10 +23,6 @@ const routes: Routes = [
           {
             path: 'person',
             component: PersonnelComponent
-          },
-          {
-            path: 'person/:id',
-            component: PersonDetailComponent
           },
           {
             path: 'places',

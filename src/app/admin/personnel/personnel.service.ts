@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable, zip } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -10,8 +10,8 @@ import {
   HttpErrorHandler
 } from '../../core/http-error-handler.service';
 import { ApiResponse, Key, Person, Role } from '../common.interfaces';
-import { RoleViewModel } from './person-detail/role.viewmodel';
-import { KeyViewModel } from '../keys/key.viewmodel';
+import { Relation } from '../../shared/relations/relations.component';
+import { RolesService } from '../roles/roles.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,11 @@ export class PersonService {
   private readonly handleError: HandleError;
   private readonly personPath: string;
   private readonly rolesPath: string;
-  constructor(private http: HttpClient, httpErrorHandler: HttpErrorHandler) {
+  constructor(
+    private http: HttpClient,
+    private rolesService: RolesService,
+    httpErrorHandler: HttpErrorHandler
+  ) {
     this.handleError = httpErrorHandler.createHandleError('PersonService');
     this.personPath = environment.API_BASE_PATH + '/person/';
     this.rolesPath = environment.API_BASE_PATH + '/roles/';
@@ -78,48 +82,52 @@ export class PersonService {
         })
       );
   }
-  getPersonRoles(id: number): Observable<{ roles: RoleViewModel[] }> {
+
+  updateRolePersonRelation(relation: Relation): Observable<boolean> {
+    const url =
+      this.personPath +
+      relation.parentId +
+      '/roles/' +
+      relation.relatedEntityId;
+
+    return relation.connected
+      ? this.http.put<ApiResponse<any>>(url, null).pipe(
+          map(() => true),
+          catchError(
+            this.handleError<boolean>('updateRolePersonRelation', false)
+          )
+        )
+      : this.http.delete<ApiResponse<any>>(url).pipe(
+          map(() => false),
+          catchError(
+            this.handleError<boolean>('updateRolePersonRelation', true)
+          )
+        );
+  }
+
+  getRolesRelationsByPersonId(id: number): Observable<Relation[]> {
     return zip(
       this.http.get<ApiResponse<Role[]>>(this.personPath + id + '/roles'),
-      this.http.get<ApiResponse<Role[]>>(this.rolesPath)
+      this.rolesService.getAllRoles()
     ).pipe(
       map(data => {
-        const personRoles = data[0].payload as Role[];
-        const allRoles = data[1].payload as Role[];
-        const res = Array<RoleViewModel>();
-
-        allRoles.forEach(role => {
-          if (
-            personRoles.some(function(item) {
-              return item.name === role.name && item.id === role.id;
-            })
-          ) {
-            res.push({
-              id: role.id,
-              name: role.name,
-              checked: true
-            });
-          } else {
-            res.push({
-              id: role.id,
-              name: role.name,
-              checked: false
-            });
-          }
+        const relations = Array<Relation>();
+        const personRoles = data[0].payload;
+        const roles = data[1];
+        roles.forEach(role => {
+          relations.push({
+            parentId: id,
+            relatedEntityId: role.id,
+            relatedEntityDisplayName: role.id + ': ' + role.name,
+            updating: false,
+            connected: personRoles.some(d => d.id === role.id)
+          });
         });
-        return { roles: res };
-      })
-    );
-  }
-  attachRoleToPerson(personId, roleId): Observable<{}> {
-    return this.http.put<ApiResponse<any>>(
-      this.personPath + personId + '/roles/' + roleId,
-      null
-    );
-  }
-  detachRoleFromPerson(personId, roleId): Observable<{}> {
-    return this.http.delete<ApiResponse<any>>(
-      this.personPath + personId + '/roles/' + roleId
+        return relations;
+      }),
+      catchError(
+        this.handleError<Relation[]>('getRolesRelationsByPersonId', [])
+      )
     );
   }
 }

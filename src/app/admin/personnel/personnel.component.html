@@ -21,8 +21,12 @@
       <td>{{person.id}}</td>
       <td>{{person.name}}</td>
       <td>
+        <!--
         <button pButton type="button" label="Open" routerLink="/admin/person/{{person.id}}" class="ui-button-raised ui-button-secondary"></button>
-        &nbsp;
+        -->
+
+        <p-button styleClass="ui-button-secondary" label="Roles"  (onClick)="editRoles(person)"></p-button>
+
         <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayPersonDialog(person)"></p-button>
         &nbsp;
         <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deletePerson(person.id)"></p-button>
@@ -51,4 +55,8 @@
     <br>
     <p-button [disabled]="!newUserForm.valid" styleClass="ui-button-info" label="Save" type="submit"></p-button>
   </form>
+</p-dialog>
+
+<p-dialog header="{{ rolesFormTitle }}" [modal]="true" [(visible)]="displayRolesRelations">
+  <app-relations *ngFor="let rel of rolesPersonRelations" [relation]="rel" (updateRelation)="updateRolePersonRelation($event)"></app-relations>
 </p-dialog>

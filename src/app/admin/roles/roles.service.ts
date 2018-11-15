@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ApiResponse, Role } from '../common.interfaces';
 import { catchError, map } from 'rxjs/operators';
 import {
-  HttpErrorHandler,
-  HandleError
+  HandleError,
+  HttpErrorHandler
 } from '../../core/http-error-handler.service';
 import { Observable } from 'rxjs/index';
 import { environment } from '../../../environments/environment';
@@ -19,13 +19,10 @@ export class RolesService {
     this.handleError = httpErrorHandler.createHandleError('RolesService');
     this.rolePath = environment.API_BASE_PATH + '/roles/';
   }
-  getAllRoles(): Observable<{ roles: Role[] }> {
-    return this.http.get<ApiResponse<Role[]>>(this.rolePath).pipe(
-      map(data => {
-        const roles = data.payload as Role[];
-        return { roles: roles };
-      })
-    );
+  getAllRoles(): Observable<Role[]> {
+    return this.http
+      .get<ApiResponse<Role[]>>(this.rolePath)
+      .pipe(map(data => data.payload));
   }
   createRole(role: Role): Observable<Role> {
     return this.http.post<ApiResponse<Role>>(this.rolePath, role).pipe(

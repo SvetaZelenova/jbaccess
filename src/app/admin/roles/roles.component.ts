@@ -34,7 +34,7 @@ export class RolesComponent implements OnInit {
   loadRoles(showMessage: boolean = true) {
     this.isRefreshing = true;
     this.rolesService.getAllRoles().subscribe(data => {
-      this.roles = data.roles;
+      this.roles = data;
       this.isRefreshing = false;
       if (!showMessage) {
         return;
