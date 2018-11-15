@@ -23,3 +23,15 @@ html, body {
     }
   }
 }
+
+.ui-table table {
+  table-layout: auto;
+}
+.ui-table-tbody, .ui-table-thead {
+  td:last-child, th:last-child {
+    width: 180px;
+  }
+  td:first-child, th:first-child {
+    width:  80px;
+  }
+}
