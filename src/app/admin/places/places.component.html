@@ -1,7 +1,7 @@
 <p-table #placesTable [value]="places" [paginator]="false" [rows]="10" [globalFilterFields]="['name']" [responsive]="true">
   <ng-template pTemplate="caption">
     <div class="ui-toolbar-group-left">
-      <p-button styleClass="ui-button-primary" label="Add" icon="fa fa-plus" (onClick)="displayPlaceForm()"></p-button>
+      <p-button styleClass="ui-button-success" label="Add" icon="fa fa-plus" (onClick)="displayPlaceForm()"></p-button>
     </div>
     <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
     <input class="ui-inputtext ui-corner-all ui-state-default ui-widget" type="text" pInputText size="50" placeholder="Filter places" (input)="placesTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
@@ -22,9 +22,7 @@
       <td>{{place.name}}</td>
       <td>
         <p-button styleClass="ui-button-secondary" label="Doors"  (onClick)="editDoors(place)"></p-button>
-        &nbsp;
         <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayPlaceForm(place)"></p-button>
-        &nbsp;
         <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deletePlace(place.id)"></p-button>
       </td>
     </tr>

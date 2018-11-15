@@ -5,3 +5,21 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+.ui-table-tbody td p-button {
+  $_radius: 3px;
+  button.ui-corner-all {
+    border-radius: 0;
+  }
+
+  &:first-of-type {
+    button.ui-corner-all {
+      border-radius: $_radius 0 0 $_radius;
+    }
+  }
+  &:last-of-type {
+    button.ui-corner-all {
+      border-radius: 0 $_radius $_radius 0;
+    }
+  }
+}

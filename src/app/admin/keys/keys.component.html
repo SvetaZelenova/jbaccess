@@ -2,7 +2,7 @@
   <ng-template pTemplate="caption">
     <div style="overflow: hidden">
       <div class="ui-toolbar-group-left">
-        <p-button styleClass="ui-button-success" label="Create Key" icon="fa fa-plus" (onClick)="displayKeyForm()"></p-button>
+        <p-button styleClass="ui-button-success" label="Add" icon="fa fa-plus" (onClick)="displayKeyForm()"></p-button>
       </div>
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
       <input type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget" pInputText size="50" placeholder="Filter Keys" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
@@ -25,11 +25,8 @@
       <td>{{key.name}} [<em>{{key.accessKey}}</em>]</td>
       <td>{{key.person?.id}} : {{key.person?.name}}</td>
       <td>
-
-          <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayKeyForm(key)"></p-button>
-          &nbsp;
-          <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteKey(key.id)"></p-button>
-
+        <p-button styleClass="ui-button-warning" icon="fa fa-edit" (onClick)="displayKeyForm(key)"></p-button>
+        <p-button styleClass="ui-button-danger" icon="fa fa-trash"  (onClick)="deleteKey(key.id)"></p-button>
       </td>
     </tr>
   </ng-template>
