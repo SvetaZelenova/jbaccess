@@ -40,6 +40,11 @@ export interface Person {
   name: string;
 }
 
+export interface Role {
+  id: number;
+  name: string;
+}
+
 export interface Place {
   id: number;
   name: string;
@@ -58,10 +63,6 @@ export interface Key {
   personId: number;
 }
 
-export interface Role {
-  id: number;
-  name: string;
-}
 export interface Controller {
   id: number;
   name: string;

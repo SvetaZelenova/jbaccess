@@ -1,0 +1,53 @@
+<p-button class="right" styleClass="ui-button-primary" label="Resolve ACLs" (onClick)="displayResolveAcls = true;"></p-button>
+
+<p-dropdown *ngIf="personsAndRoles"
+            [options]="personsAndRoles"
+            [(ngModel)]="currentTarget"
+            placeholder="Select a Person or a Role"
+            [group]="true"
+            [filter]="true"
+            (onChange)="onTargetSelected(currentTarget)"
+            filterBy="label,value.name"></p-dropdown>
+<hr>
+
+<div *ngIf="currentTarget">
+
+  <h2>
+    ACLs for {{ currentTarget.targetType === 'person' ? "person" : "role"}}
+    {{ currentTarget.item.name }}
+  </h2>
+  <div class="place" *ngFor="let place of places">
+    <div class="name">
+      <h3><small>{{ place.id }}:</small> {{ place.name }}</h3>
+    </div>
+    <div class="allow">
+      <button *ngIf="!aclsByPlace[place.id].allow" (click)="addAcl(currentTarget, place.id, ACL_TYPE.Allow, $event.target)">Add allow</button>
+      <div *ngIf="aclsByPlace[place.id].allow">
+        {{ aclsByPlace[place.id].allow.id }}
+        <button (click)="deleteAcl(aclsByPlace[place.id].allow, $event.target)">Remove</button>
+      </div>
+    </div>
+    <div class="disallow">
+      <button *ngIf="!aclsByPlace[place.id].disallow" (click)="addAcl(currentTarget, place.id, ACL_TYPE.Disallow, $event.target)">Add disallow</button>
+      <div *ngIf="aclsByPlace[place.id].disallow">
+        {{ aclsByPlace[place.id].disallow.id }}
+        <button (click)="deleteAcl(aclsByPlace[place.id].disallow, $event.target)">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="Resolve ACLs" [modal]="true" [(visible)]="displayResolveAcls">
+  <p-header></p-header>
+  <p-dropdown *ngIf="controllers.length"
+              [options]="controllers"
+              [(ngModel)]="selectedController"
+              placeholder="Select a Controller"
+              [filter]="true"
+              (onChange)="onControllerSelected(selectedController)"
+              filterBy="label,value.name,value.id,value.controllerId"></p-dropdown>
+  <hr>
+  <pre>
+    {{ resolveResult }}
+  </pre>
+</p-dialog>

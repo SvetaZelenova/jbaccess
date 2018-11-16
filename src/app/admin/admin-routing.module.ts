@@ -9,6 +9,7 @@ import { KeysComponent } from './keys/keys.component';
 import { DoorsComponent } from './doors/doors.component';
 import { RolesComponent } from './roles/roles.component';
 import { ControllersComponent } from './controllers/controllers.component';
+import { AclsComponent } from './acls/acls.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,10 @@ const routes: Routes = [
           {
             path: 'controllers',
             component: ControllersComponent
+          },
+          {
+            path: 'acls',
+            component: AclsComponent
           }
         ]
       }

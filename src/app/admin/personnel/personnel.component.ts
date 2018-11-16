@@ -40,7 +40,7 @@ export class PersonnelComponent implements OnInit {
   loadPersonnel(showMessage: boolean = true) {
     this.isRefreshing = true;
     this.personService.getAllPersonnel().subscribe(data => {
-      this.persons = data.persons;
+      this.persons = data;
       this.isRefreshing = false;
       if (!showMessage) {
         return;

@@ -29,11 +29,10 @@ export class PersonService {
     this.personPath = environment.API_BASE_PATH + '/person/';
     this.rolesPath = environment.API_BASE_PATH + '/roles/';
   }
-  getAllPersonnel(): Observable<{ persons: Person[] }> {
+  getAllPersonnel(): Observable<Person[]> {
     return this.http.get<ApiResponse<Person[]>>(this.personPath).pipe(
       map(data => {
-        const persons = data.payload as Person[];
-        return { persons: persons };
+        return data.payload;
       })
     );
   }

@@ -15,6 +15,7 @@ import { ConfirmationService } from 'primeng/api';
 import { DoorsComponent } from './doors/doors.component';
 import { RolesComponent } from './roles/roles.component';
 import { ControllersComponent } from './controllers/controllers.component';
+import { AclsComponent } from './acls/acls.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { ControllersComponent } from './controllers/controllers.component';
     KeysComponent,
     DoorsComponent,
     RolesComponent,
-    ControllersComponent
+    ControllersComponent,
+    AclsComponent
   ],
   providers: [MessageService, ConfirmationService]
 })

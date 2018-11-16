@@ -109,7 +109,7 @@ export class AclsService {
       );
   }
 
-  resolveAcls(controllerId: number): Observable<ResolvedAcl> {
+  resolveAcls(controllerId: any): Observable<ResolvedAcl> {
     return this.http
       .get<ApiResponse<ResolvedAcl>>(
         `${this.basePath}/controllers/${controllerId}/resolve-acls`
