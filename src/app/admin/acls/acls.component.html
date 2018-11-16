@@ -20,25 +20,42 @@
     <div class="name">
       <h3><small>{{ place.id }}:</small> {{ place.name }}</h3>
     </div>
-    <div class="allow">
-      <button *ngIf="!aclsByPlace[place.id].allow" (click)="addAcl(currentTarget, place.id, ACL_TYPE.Allow, $event.target)">Add allow</button>
-      <div *ngIf="aclsByPlace[place.id].allow">
-        {{ aclsByPlace[place.id].allow.id }}
-        <button (click)="deleteAcl(aclsByPlace[place.id].allow, $event.target)">Remove</button>
+    <div class="inner-flex">
+      <div class="allow">
+
+        <p-button *ngIf="!aclsByPlace[place.id].allow"
+                  styleClass="ui-button-success"
+                  icon="fa fa-plus"
+                  (onClick)="addAcl(currentTarget, place.id, ACL_TYPE.Allow, $event)"></p-button>
+
+        <div *ngIf="aclsByPlace[place.id].allow">
+          {{ aclsByPlace[place.id].allow.id }}
+          <p-button styleClass="ui-button-danger"
+                    icon="fa fa-trash"
+                    (onClick)="deleteAcl(aclsByPlace[place.id].allow, $event)"></p-button>
+        </div>
+
       </div>
-    </div>
-    <div class="disallow">
-      <button *ngIf="!aclsByPlace[place.id].disallow" (click)="addAcl(currentTarget, place.id, ACL_TYPE.Disallow, $event.target)">Add disallow</button>
-      <div *ngIf="aclsByPlace[place.id].disallow">
-        {{ aclsByPlace[place.id].disallow.id }}
-        <button (click)="deleteAcl(aclsByPlace[place.id].disallow, $event.target)">Remove</button>
+      <div class="disallow">
+
+        <p-button *ngIf="!aclsByPlace[place.id].disallow"
+                  styleClass="ui-button-danger"
+                  icon="fa fa-plus"
+                  (onClick)="addAcl(currentTarget, place.id, ACL_TYPE.Disallow, $event)"></p-button>
+
+        <div *ngIf="aclsByPlace[place.id].disallow">
+          {{ aclsByPlace[place.id].disallow.id }}
+          <p-button styleClass="ui-button-danger"
+                    icon="fa fa-trash"
+                    (onClick)="deleteAcl(aclsByPlace[place.id].disallow, $event)"></p-button>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
 
 <p-dialog header="Resolve ACLs" [modal]="true" [(visible)]="displayResolveAcls">
-  <p-header></p-header>
   <p-dropdown *ngIf="controllers.length"
               [options]="controllers"
               [(ngModel)]="selectedController"

@@ -10,6 +10,7 @@ import { SelectItem, SelectItemGroup } from 'primeng/api';
 import { PlacesService } from '../places/places.service';
 import { AclsForPlace } from './acls-for-place';
 import { ControllersService } from '../controllers/controllers.service';
+import { getButtonFromEvent } from '../../shared/button-from-event';
 
 export interface Target {
   targetType: AclTarget;
@@ -147,12 +148,8 @@ export class AclsComponent implements OnInit {
     );
   }
 
-  addAcl(
-    target: Target,
-    placeId: number,
-    aclType: AclType,
-    button: HTMLButtonElement
-  ) {
+  addAcl(target: Target, placeId: number, aclType: AclType, e: Event) {
+    const button = getButtonFromEvent(e);
     button.disabled = true;
     this.aclsService
       .addAcl(target.targetType, aclType, target.targetId, placeId)
@@ -167,7 +164,8 @@ export class AclsComponent implements OnInit {
       );
   }
 
-  deleteAcl(acl: Acl, button: HTMLButtonElement) {
+  deleteAcl(acl: Acl, e: Event) {
+    const button = getButtonFromEvent(e);
     button.disabled = true;
     this.aclsService.deleteAcl(acl.id).subscribe(
       data => {

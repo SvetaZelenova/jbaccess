@@ -8,7 +8,7 @@
   }
 
   & > * {
-    flex:1 1 110px;
+    flex:1 1 220px;
     text-align: center;
     padding: 3px;
   }
@@ -17,11 +17,20 @@
     text-align: left;
   }
 }
+.inner-flex {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+
+  & > * {
+    flex:1 1 110px
+  }
+}
 .disallow {
-  background-color: thistle;
+  background-color: #FBD7DA;
 }
 .allow {
-  background-color: aquamarine;
+  background-color: #DDF0DD;
 }
 
 pre {
